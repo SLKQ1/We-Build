@@ -1,13 +1,7 @@
 <script setup>
-import {Head} from '@inertiajs/inertia-vue3';
+import {Head, Link} from '@inertiajs/inertia-vue3';
 import {ref} from "vue";
 
-defineProps({
-    canLogin: Boolean,
-    canRegister: Boolean,
-    laravelVersion: String,
-    phpVersion: String,
-})
 const isHamburgerToggled = ref(false)
 
 function toggleHamburger() {
@@ -34,10 +28,11 @@ function toggleHamburger() {
                 <a class="hover:text-gray-400 cursor-pointer">Leaderboards</a>
             </div>
             <!-- Get started -->
-            <div
+            <Link
+                :href="route('register')"
                 class="hidden p-3 px-6 text-white bg-indigo-400 rounded-full hover:bg-indigo-600 cursor-pointer md:block">
                 Get Started
-            </div>
+            </Link>
 
             <!-- Hamburger Icon -->
             <button id="menu-btn" @click="toggleHamburger" :class="{open: isHamburgerToggled}"
@@ -53,11 +48,10 @@ function toggleHamburger() {
             <div id="menu"
                  :class="{hidden: !isHamburgerToggled, flex: isHamburgerToggled}"
                  class="absolute flex-col items-center self-end py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md">
-                <a href="#">Pricing</a>
-                <a href="#">Product</a>
                 <a href="#">About Us</a>
-                <a href="#">Careers</a>
-                <a href="#">Community</a>
+                <a href="#">Projects</a>
+                <a href="#">Leaderboards</a>
+                <a :href="route('register')">Get Started</a>
             </div>
         </div>
     </nav>
@@ -78,9 +72,11 @@ function toggleHamburger() {
                 </p>
                 <!-- Get started -->
                 <div class="flex justify-center md:justify-start">
-                    <div class="p-3 px-6 text-white bg-indigo-400 rounded-full hover:bg-indigo-600 cursor-pointer">
+                    <Link
+                        :href="route('register')"
+                        class="hidden p-3 px-6 text-white bg-indigo-400 rounded-full hover:bg-indigo-600 cursor-pointer md:block">
                         Get Started
-                    </div>
+                    </Link>
                 </div>
             </div>
             <!-- Image -->
@@ -193,10 +189,11 @@ function toggleHamburger() {
             </h2>
             <!-- Get started -->
             <div class="flex justify-center md:justify-start">
-                <div
+                <Link
+                    :href="route('register')"
                     class="p-3 px-6 pt-2 bg-white text-indigo-400 rounded-full shadow-2xl baseline hover:bg-indigo-900">
                     Get Started
-                </div>
+                </Link>
             </div>
         </div>
     </section>
