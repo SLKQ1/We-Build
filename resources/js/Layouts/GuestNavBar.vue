@@ -5,12 +5,14 @@
         <div class="flex items-center justify-between">
             <!-- Logo -->
             <div>
-                We Build
+                <Link href="/">
+                    <ApplicationLogo class="w-20 h-20 fill-current text-gray-500" />
+                </Link>
             </div>
             <!-- Nav menu items -->
             <div class="hidden space-x-6 md:flex">
                 <a class="hover:text-gray-400 cursor-pointer">About Us</a>
-                <a class="hover:text-gray-400 cursor-pointer">Projects</a>
+                <a :href="route('projects')" class="hover:text-gray-400 cursor-pointer">Projects</a>
                 <a class="hover:text-gray-400 cursor-pointer">Leaderboards</a>
             </div>
             <!-- Get started -->
@@ -46,6 +48,7 @@
 <script setup>
 import {Link} from '@inertiajs/inertia-vue3';
 import {ref} from "vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const isHamburgerToggled = ref(false)
 
