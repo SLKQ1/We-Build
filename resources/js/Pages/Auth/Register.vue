@@ -5,6 +5,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const form = useForm({
     name: '',
@@ -24,6 +25,8 @@ const submit = () => {
 <template>
     <GuestLayout>
         <template #authPages>
+            <ApplicationLogo class="w-20 h-20 fill-current mx-auto mb-2 text-gray-500" />
+            <p class="font-semibold text-center text-gray-800 mb-4">Register to participate to start building amazing projects!</p>
             <Head title="Register" />
 
             <form @submit.prevent="submit">

@@ -30,6 +30,8 @@ const submit = () => {
         <template #authPages>
             <Head title="Reset Password" />
 
+            <ApplicationLogo class="w-20 h-20 fill-current mx-auto mb-2 text-gray-500" />
+
             <form @submit.prevent="submit">
                 <div>
                     <InputLabel for="email" value="Email" />

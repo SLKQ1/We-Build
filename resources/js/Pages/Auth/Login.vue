@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 defineProps({
     canResetPassword: Boolean,
@@ -29,6 +30,8 @@ const submit = () => {
     <GuestLayout>
         <template #authPages>
             <Head title="Log in" />
+
+            <ApplicationLogo class="w-20 h-20 fill-current mx-auto mb-2 text-gray-500" />
 
             <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
                 {{ status }}

@@ -22,6 +22,8 @@ const submit = () => {
         <template #authPages>
             <Head title="Confirm Password"/>
 
+            <ApplicationLogo class="w-20 h-20 fill-current mx-auto mb-2 text-gray-500" />
+
             <div class="mb-4 text-sm text-gray-600">
                 This is a secure area of the application. Please confirm your password before continuing.
             </div>
