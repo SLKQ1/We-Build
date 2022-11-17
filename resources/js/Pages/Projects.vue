@@ -4,11 +4,9 @@
         <ProjectList></ProjectList>
     </AuthenticatedLayout>
 
-    <GuestLayout>
-        <template v-slot:noStyle>
-            <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4">Projects</h1>
-            <ProjectList></ProjectList>
-        </template>
+    <GuestLayout v-else>
+        <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4">Projects</h1>
+        <ProjectList></ProjectList>
     </GuestLayout>
 </template>
 
