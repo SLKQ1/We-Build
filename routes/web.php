@@ -32,4 +32,8 @@ Route::get('/projects', function () {
     return Inertia::render('Projects');
 })->name('projects');
 
+Route::get('/leaderboards', function () {
+    return Inertia::render('Leaderboards');
+})->name('leaderboards');
+
 require __DIR__.'/auth.php';

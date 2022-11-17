@@ -13,7 +13,7 @@
             <div class="hidden space-x-6 md:flex">
                 <a class="hover:text-gray-400 cursor-pointer">About Us</a>
                 <a :href="route('projects')" class="hover:text-gray-400 cursor-pointer">Projects</a>
-                <a class="hover:text-gray-400 cursor-pointer">Leaderboards</a>
+                <a :href="route('leaderboards')" class="hover:text-gray-400 cursor-pointer">Leaderboards</a>
             </div>
             <!-- Get started -->
             <Link
@@ -37,8 +37,8 @@
                  :class="{hidden: !isHamburgerToggled, flex: isHamburgerToggled}"
                  class="absolute flex-col items-center self-end py-8 mt-10 space-y-6 font-bold bg-white sm:w-auto sm:self-center left-6 right-6 drop-shadow-md">
                 <a href="#">About Us</a>
-                <a href="#">Projects</a>
-                <a href="#">Leaderboards</a>
+                <a :href="route('projects')">Projects</a>
+                <a :href="route('leaderboards')">Leaderboards</a>
                 <a :href="route('register')">Get Started</a>
             </div>
         </div>
