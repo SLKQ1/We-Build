@@ -1,5 +1,4 @@
 <template>
-    <Head title="Projects"></Head>
     <div v-for="project in data">
         <Card :project="project"></Card>
     </div>
