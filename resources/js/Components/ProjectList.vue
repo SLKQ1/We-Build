@@ -1,5 +1,5 @@
 <template>
-    <div v-for="project in data">
+    <div v-for="project in data" :key="project.id">
         <Card :project="project"></Card>
     </div>
 </template>
