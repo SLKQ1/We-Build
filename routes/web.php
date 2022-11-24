@@ -32,6 +32,10 @@ Route::get('/projects', function () {
     return Inertia::render('Projects');
 })->name('projects');
 
+Route::get('/project/{id}', function () {
+    return Inertia::render('Project'); 
+})->name('Project'); 
+
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');
 })->name('leaderboards');
