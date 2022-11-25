@@ -31,6 +31,7 @@
         "@fortawesome/free-regular-svg-icons": "^6.2.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.1",
         "@fortawesome/vue-fontawesome": "^3.0.2",
+        "@tiptap/extension-link": "^2.0.0-beta.203",
         "@tiptap/extension-task-item": "^2.0.0-beta.202",
         "@tiptap/extension-task-list": "^2.0.0-beta.202",
         "@tiptap/extension-underline": "^2.0.0-beta.202",

@@ -35,7 +35,7 @@
                             class="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
                             <font-awesome-icon icon="fa-solid fa-code" />
                         </button>
-                        
+
                         <button v-if="editor" @click="editor.chain().focus().toggleBulletList().run()" type="button"
                             class="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
                             <font-awesome-icon icon="fa-solid fa-list-ul" />
@@ -89,6 +89,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import TaskItem from '@tiptap/extension-task-item'
 import TaskList from '@tiptap/extension-task-list'
+import Link from '@tiptap/extension-link'
 
 const editor = useEditor({
     content: '<p>Enter your project description here</p>',
@@ -98,7 +99,7 @@ const editor = useEditor({
                 HTMLAttributes: {
                     class: 'text-red-400 bg-black',
                 }
-            }, 
+            },
             heading: {
                 HTMLAttributes: {
                     levels: [1, 2, 3],
@@ -106,13 +107,36 @@ const editor = useEditor({
                 }
             }
         }),
-        Underline, 
+        Underline,
         TaskList,
         TaskItem.configure({
-        //   nested: true,
+            //   nested: true,
+        }),
+        Link.configure({
+            openOnClick: false,
+            autolink: true,
         }),
     ],
 })
+
+function setLink() {
+    // const previousUrl = editor.getAttributes('link').href
+    const url = window.prompt('URL', '')
+
+    // cancelled
+    if (url === null) {
+        return
+    }
+
+    // empty
+    if (url === '') {
+        editor.chain().focus().extendMarkRange('link').unsetLink().run()
+        return
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run()
+}
 
 function addBulletedList() {
     if (editor) {
@@ -122,7 +146,7 @@ function addBulletedList() {
 }
 
 onBeforeUnmount(() => {
-    editor.destory()
+
 })
 
 </script>
