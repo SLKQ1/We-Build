@@ -50,7 +50,7 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        return Inertia::render('Project'); 
     }
 
     /**

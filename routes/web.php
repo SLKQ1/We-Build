@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -28,13 +29,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/projects', function () {
-    return Inertia::render('Projects');
-})->name('projects');
-
-Route::get('/project/{id}', function () {
-    return Inertia::render('Project'); 
-})->name('Project'); 
+Route::resource('projects', ProjectController::class); 
 
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');

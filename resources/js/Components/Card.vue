@@ -17,6 +17,8 @@
 <script setup>
 import {useTruncate} from "@/Composables/truncateStrings";
 
-const props = defineProps(['project'])
+const props = defineProps({
+    project: Object
+})
 const description = useTruncate(props.project.description, 200, '...')
 </script>
