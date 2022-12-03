@@ -7,15 +7,16 @@
         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> {{description}}</p>
 
         <div class="mt-auto">
-            <a @click="$emit('cardClicked', project.id)" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-indigo-400 rounded-lg hover:bg-indigo-600">
+            <Link :href="route('projects.show', {id: project.id})" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-indigo-400 rounded-lg hover:bg-indigo-600">
                 Check it out!
-            </a>
+            </Link>
         </div>
     </div>
 </template>
 
 <script setup>
 import {useTruncate} from "@/Composables/truncateStrings";
+import { Link } from '@inertiajs/inertia-vue3'
 
 const props = defineProps({
     project: Object

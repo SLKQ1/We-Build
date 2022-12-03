@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
@@ -16,8 +19,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Projects', [
-            'projects' => Project::all(),
+        return Inertia::render('Projects/Index', [
+            'projects' => Project::all()
         ]);
     }
 
@@ -28,7 +31,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Projects/Create');
     }
 
     /**
@@ -39,7 +42,21 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => ['required', 'max:50'],
+            'description' => ['required'],
+            'team_size' => ['required', 'max:10'],
+        ]);
+
+        $project = new Project; 
+        $project->user_id = $request->user()->id;
+        $project->title = $request->title; 
+        $project->description = $request->description; 
+        $project->team_size = $request->team_size; 
+        $project->due = $request->due; 
+        $project->save(); 
+        
+        return Redirect::route('projects.show', $project);
     }
 
     /**
@@ -50,7 +67,8 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        return Inertia::render('Project'); 
+        $project = Project::where('id', $id)->first(); 
+        return Inertia::render('Projects/Show', ['project' => $project]);
     }
 
     /**
@@ -61,7 +79,7 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        return Inertia::render('Projects/Create');
     }
 
     /**

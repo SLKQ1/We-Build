@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Projects"></Head>
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
@@ -10,6 +11,12 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
+                        <div class="flex justify-end">
+                            <Link :href="route('projects.create')"
+                                class="hidden p-3 px-6 text-white bg-indigo-400 rounded-full hover:bg-indigo-600 cursor-pointer md:block">
+                            Create Project
+                            </Link>
+                        </div>
                         <div class="flex flex-col gap-y-3 items-center justify-center">
                             <ProjectList :projects="projects"></ProjectList>
                         </div>
@@ -31,7 +38,8 @@
 import ProjectList from '@/Components/ProjectList.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
+
 
 defineProps({
     projects: Object,
