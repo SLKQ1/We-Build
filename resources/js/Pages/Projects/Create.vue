@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <button type="submit"
-                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg"
+                                class="inline-flex items-center px-5 mt-3 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg"
                                 :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                 Publish post
                             </button>

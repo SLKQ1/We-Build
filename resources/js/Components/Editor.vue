@@ -1,6 +1,6 @@
 <template>
     <form>
-        <div class="w-full mb-4 border rounded-lg bg-gray-700 border-gray-600">
+        <div class="w-full border rounded-lg bg-gray-700 border-gray-600">
             <div class="flex items-center justify-between px-3 py-2 border-b border-gray-600">
                 <div class="flex flex-wrap items-center sm:divide-x divide-gray-600">
                     <div class="flex items-center space-x-1 sm:pr-4">
