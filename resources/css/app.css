@@ -56,21 +56,28 @@
 @layer base {
     h1 {
         @apply text-4xl;
+        @apply my-3;
     }
 
     h2 {
         @apply text-2xl;
+        @apply my-3;
     }
 
     h3 {
         @apply text-xl;
+        @apply my-3;
     }
 
     ol {
+        @apply ml-3;
+        @apply my-3;
         @apply list-decimal;
     }
 
     ul {
+        @apply ml-3;
+        @apply my-3;
         @apply list-disc;
     }
 
@@ -82,6 +89,6 @@
     }
 
     pre {
-        @apply my-3;
+        @apply my-5;
     }
 }
