@@ -1,6 +1,19 @@
 <template>
-  <GuestLayout>
+  <Head title="View Project"></Head>
+  <AuthenticatedLayout v-if="$page.props.auth.user">
+    <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{project.title}}
+            </h2>
+        </template>
     <html lang="en" class="list-disc">
+    <div class="m-4">
+      <div class="flex justify-end">
+        <Link :href="route('projects.edit', { id: project.id })"
+          class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+        Edit
+        </Link>
+      </div>
       <div class="flex flex-col gap-y-3 items-center justify-between">
         <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4"> {{ project.title }} </h1>
         <div>
@@ -12,12 +25,39 @@
           Apply to project
         </button>
       </div>
+    </div>
+
+    </html>
+  </AuthenticatedLayout>
+  <GuestLayout v-else>
+    <html lang="en" class="list-disc">
+    <div class="flex justify-end">
+      <Link :href="route('projects.edit', { id: project.id })"
+        class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+      Edit
+      </Link>
+    </div>
+    <div class="flex flex-col gap-y-3 items-center justify-between">
+      <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4"> {{ project.title }} </h1>
+      <div>
+        <p v-html="project.description">
+        </p>
+      </div>
+      <button type="submit"
+        class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+        Apply to project
+      </button>
+    </div>
+
     </html>
   </GuestLayout>
 </template>
 
 <script setup>
+import { Head } from '@inertiajs/inertia-vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import { Link } from '@inertiajs/inertia-vue3';
 
 defineProps({
   project: Object,

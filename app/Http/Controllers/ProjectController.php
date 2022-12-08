@@ -79,7 +79,9 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        return Inertia::render('Projects/Create');
+        $project = Project::where('id', $id)->first();
+        Log::info('edit', [$project]); 
+        return Inertia::render('Projects/Edit', ['project' => $project]);
     }
 
     /**

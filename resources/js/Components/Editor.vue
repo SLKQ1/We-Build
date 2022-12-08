@@ -88,11 +88,21 @@ export default {
         EditorContent,
     },
 
+    props: {
+        description: String
+    }, 
+
     data() {
         return {
             editor: null,
         }
     },
+
+    setup(props) {
+        const content = props.description
+
+        return {content}
+    }, 
 
     mounted() {
         this.editor = new Editor({
@@ -101,7 +111,7 @@ export default {
                     class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-2xl m-5 focus:outline-none text-sm min-h-[50vh]',
                 },
             },
-            content: '<p>Enter your project description here!</p>',
+            content: this.content,
             extensions: [
                 StarterKit.configure({
                     heading: {

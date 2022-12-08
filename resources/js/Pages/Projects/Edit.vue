@@ -2,13 +2,13 @@
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Project X
+                {{                                                                                                                                                                           project.title                                                                                                                                                                           }}
             </h2>
         </template>
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form @submit.prevent="submit">
+                    <form @submit.prevent="form.put('projects.update', form.id)">
                         <div class="p-6 bg-white border-b border-gray-200">
                             <div class="flex flex-col gap-y-3">
                                 <div>
@@ -24,7 +24,7 @@
                                     <InputError class="mt-2" :message="form.errors.team_size" />
                                 </div>
                                 <div>
-                                    <EditorVue ref="editorReference" />
+                                    <EditorVue ref="editorReference" :description="form.description" />
                                     <InputError class="mt-2" :message="form.errors.description" />
                                 </div>
                                 <div>
@@ -39,7 +39,6 @@
                                 :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                 Publish post
                             </button>
-                            <p>{{ project }}</p>
                         </div>
                     </form>
                 </div>
@@ -48,26 +47,42 @@
     </AuthenticatedLayout>
 </template>
 
-<script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue';
+<script>
+import { Inertia } from '@inertiajs/inertia';
+import { Head, useForm } from '@inertiajs/inertia-vue3';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import EditorVue from '@/Components/Editor.vue';
+import moment from 'moment';
 
-const editorReference = ref(null)
+export default {
+    components: {
+        Head,
+        Inertia,
+        TextInput,
+        InputError,
+        InputLabel,
+        AuthenticatedLayout,
+        EditorVue
+    },
+    props: {
+        project: Object,
+        errors: Object
+    },
 
-const form = useForm({
-    title: null,
-    description: null,
-    team_size: 1,
-    due: null,
-})
+    setup(props) {
+        const form = useForm({
+            id: props.project.id,
+            title: props.project.title,
+            description: props.project.description,
+            editorReference: props.project.description,
+            team_size: props.project.team_size,
+            due: moment(props.project.due).format('YYYY-MM-DD'),
+        })
 
-function submit() {
-    form.description = editorReference.value.getEditorContentAsJson()
-    form.post('/projects')
+        return { form }
+    },
 }
 </script>
