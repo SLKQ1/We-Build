@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col max-w-xs p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 md:max-w-2xl">
+    <div class="flex flex-col m-auto max-w-xs p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 md:max-w-2xl">
         <a href="#">
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{project.title}} </h5>
         </a>
