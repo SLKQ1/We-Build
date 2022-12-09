@@ -139,7 +139,6 @@ export default {
 
     methods: {
         getEditorContentAsJson() {
-            console.log(this.editor.getHTML())
             return this.editor.getHTML()
         }
     }

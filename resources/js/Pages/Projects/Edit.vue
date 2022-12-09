@@ -2,13 +2,13 @@
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{                                                                                                                                                                           project.title                                                                                                                                                                           }}
+                {{ project.title }}
             </h2>
         </template>
         <div class="py-12">
             <div class="mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <form @submit.prevent="form.put('projects.update', form.id)">
+                    <form @submit.prevent="submit">
                         <div class="p-6 bg-white border-b border-gray-200">
                             <div class="flex flex-col gap-y-3">
                                 <div>
@@ -67,9 +67,17 @@ export default {
         AuthenticatedLayout,
         EditorVue
     },
+
     props: {
         project: Object,
         errors: Object
+    },
+
+    methods: {
+        submit() {
+            this.form.description = this.$refs.editorReference.getEditorContentAsJson()
+            this.form.put(route('projects.update', this.form.id))
+        }
     },
 
     setup(props) {
@@ -84,5 +92,6 @@ export default {
 
         return { form }
     },
+
 }
 </script>

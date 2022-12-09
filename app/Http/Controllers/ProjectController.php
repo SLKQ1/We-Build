@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -12,6 +13,16 @@ use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Project::class, 'project');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,22 +51,16 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Project $project, StoreProjectRequest $request)
     {
-        $request->validate([
-            'title' => ['required', 'max:50'],
-            'description' => ['required'],
-            'team_size' => ['required', 'max:10'],
-        ]);
-
-        $project = new Project; 
+        $project = new Project;
         $project->user_id = $request->user()->id;
-        $project->title = $request->title; 
-        $project->description = $request->description; 
-        $project->team_size = $request->team_size; 
-        $project->due = $request->due; 
-        $project->save(); 
-        
+        $project->title = $request->title;
+        $project->description = $request->description;
+        $project->team_size = $request->team_size;
+        $project->due = $request->due;
+        $project->save();
+
         return Redirect::route('projects.show', $project);
     }
 
@@ -65,9 +70,8 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
-        $project = Project::where('id', $id)->first(); 
         return Inertia::render('Projects/Show', ['project' => $project]);
     }
 
@@ -77,10 +81,8 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        $project = Project::where('id', $id)->first();
-        Log::info('edit', [$project]); 
         return Inertia::render('Projects/Edit', ['project' => $project]);
     }
 
@@ -91,9 +93,18 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Project $project, StoreProjectRequest $request)
     {
-        //
+        $validatedReqest = $request->validated();
+
+        $project->title = $validatedReqest['title'];
+        $project->description = $validatedReqest['description'];
+        $project->team_size = $validatedReqest['team_size'];
+        $project->due = $validatedReqest['due'];
+
+        $project->save();
+
+        return redirect()->route('projects.index')->with('message', 'Project was updated successfully');
     }
 
     /**

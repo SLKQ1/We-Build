@@ -8,7 +8,7 @@
         </template>
     <html lang="en" class="list-disc">
     <div class="m-4">
-      <div class="flex justify-end">
+      <div v-if="$page.props.auth.user.id === project.user_id" class="flex justify-end">
         <Link :href="route('projects.edit', { id: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Edit
@@ -31,12 +31,6 @@
   </AuthenticatedLayout>
   <GuestLayout v-else>
     <html lang="en" class="list-disc">
-    <div class="flex justify-end">
-      <Link :href="route('projects.edit', { id: project.id })"
-        class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
-      Edit
-      </Link>
-    </div>
     <div class="flex flex-col gap-y-3 items-center justify-between">
       <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4"> {{ project.title }} </h1>
       <div>
