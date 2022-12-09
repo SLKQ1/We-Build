@@ -1,4 +1,5 @@
 <template>
+    <Head title="Edit Project"></Head>
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -47,7 +48,7 @@
     </AuthenticatedLayout>
 </template>
 
-<script>
+<script setup>
 import { Inertia } from '@inertiajs/inertia';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import TextInput from '@/Components/TextInput.vue';
@@ -56,42 +57,23 @@ import InputLabel from '@/Components/InputLabel.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import EditorVue from '@/Components/Editor.vue';
 import moment from 'moment';
+import { ref } from 'vue';
 
-export default {
-    components: {
-        Head,
-        Inertia,
-        TextInput,
-        InputError,
-        InputLabel,
-        AuthenticatedLayout,
-        EditorVue
-    },
+const editorReference = ref(null)
 
-    props: {
-        project: Object,
-        errors: Object
-    },
+const props = defineProps({
+    project: Object 
+})
+console.log(props.project)
+const form = useForm({
+    title: props.project.title,
+    description: props.project.description,
+    team_size: props.project.team_size,
+    due: moment(props.project.due).format('YYYY-MM-DD'),
+})
 
-    methods: {
-        submit() {
-            this.form.description = this.$refs.editorReference.getEditorContentAsJson()
-            this.form.put(route('projects.update', this.form.id))
-        }
-    },
-
-    setup(props) {
-        const form = useForm({
-            id: props.project.id,
-            title: props.project.title,
-            description: props.project.description,
-            editorReference: props.project.description,
-            team_size: props.project.team_size,
-            due: moment(props.project.due).format('YYYY-MM-DD'),
-        })
-
-        return { form }
-    },
-
+function submit() {
+    form.description = editorReference.value.getEditorContentAsJson()
+    form.post('/projects')
 }
 </script>

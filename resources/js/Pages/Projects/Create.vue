@@ -1,8 +1,9 @@
 <template>
+    <Head title="Create Project"></Head>
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Project X
+                Create a project
             </h2>
         </template>
         <div class="py-12">
@@ -39,7 +40,6 @@
                                 :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                                 Publish post
                             </button>
-                            <p>{{ project }}</p>
                         </div>
                     </form>
                 </div>
@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { useForm } from '@inertiajs/inertia-vue3';
+import { Head, useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
