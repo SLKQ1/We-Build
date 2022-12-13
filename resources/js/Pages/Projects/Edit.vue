@@ -63,7 +63,7 @@ const editorReference = ref(null)
 const props = defineProps({
     project: Object 
 })
-console.log(props.project)
+
 const form = useForm({
     title: props.project.title,
     description: props.project.description,

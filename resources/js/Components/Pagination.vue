@@ -17,6 +17,4 @@ import { Link } from '@inertiajs/inertia-vue3';
 const props = defineProps({
     links: Array
 })
-
-console.log(props.links)
 </script>
