@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); 
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->string('application_name');
             $table->longText('application_description');
             $table->integer('status'); 
             $table->timestamps();
