@@ -49,7 +49,6 @@
 </template>
 
 <script setup>
-import { Inertia } from '@inertiajs/inertia';
 import { Head, useForm } from '@inertiajs/inertia-vue3';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
@@ -74,6 +73,6 @@ const form = useForm({
 
 function submit() {
     form.description = editorReference.value.getEditorContentAsJson()
-    form.post('/projects')
+    form.put(route('projects.update', props.project.id))
 }
 </script>

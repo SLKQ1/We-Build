@@ -1,14 +1,15 @@
 <template>
+
   <Head title="View Project"></Head>
   <AuthenticatedLayout v-if="$page.props.auth.user">
     <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{project.title}}
-            </h2>
-        </template>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        {{ project.title }}
+      </h2>
+    </template>
     <html lang="en" class="list-disc">
     <div class="m-4">
-      <div v-if="$page.props.auth.user.id === project.user_id" class="flex justify-end">
+      <div v-if="$page.props.auth.user.id === project.user_id" class="flex justify-end space-x-2">
         <Link :href="route('projects.edit', { id: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Edit
@@ -20,10 +21,10 @@
           <p v-html="project.description">
           </p>
         </div>
-        <button type="submit"
+        <Link v-if="$page.props.auth.user.id !== project.user_id" :href="route('applications.create', {project_id: project.id})"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
-          Apply to project
-        </button>
+        Apply to project
+        </Link>
       </div>
     </div>
 

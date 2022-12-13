@@ -18,7 +18,8 @@
                             </Link>
                         </div>
                         <div class="flex flex-col gap-y-3">
-                            <ProjectList :projects="projects"></ProjectList>
+                            <ProjectList :projects="projects.data"></ProjectList>
+                            <Pagination class="m-auto mt-10" :links="projects.links"></Pagination>
                         </div>
                     </div>
                 </div>
@@ -29,19 +30,22 @@
     <GuestLayout v-else>
         <div class="flex flex-col gap-y-3">
             <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4">Projects</h1>
-            <ProjectList :projects="projects"></ProjectList>
+            <ProjectList :projects="projects.data"></ProjectList>
         </div>
+        <Pagination :links="projects.links"></Pagination>
     </GuestLayout>
 </template>
 
 <script setup>
+import Pagination from '@/Components/Pagination.vue';
 import ProjectList from '@/Components/ProjectList.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import GuestLayout from "@/Layouts/GuestLayout.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
 
 
-defineProps({
+const props = defineProps({
     projects: Object,
 })
+console.log(props)
 </script>

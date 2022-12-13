@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Resources\ProjectCollection;
+use App\Http\Resources\ProjectResource;
 use App\Models\Project;
+use App\Models\UserProject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
@@ -31,7 +35,7 @@ class ProjectController extends Controller
     public function index()
     {
         return Inertia::render('Projects/Index', [
-            'projects' => Project::all()
+            'projects' => Project::orderBy('created_at', 'desc')->paginate(10),
         ]);
     }
 
@@ -53,15 +57,30 @@ class ProjectController extends Controller
      */
     public function store(Project $project, StoreProjectRequest $request)
     {
-        $project = new Project;
-        $project->user_id = $request->user()->id;
-        $project->title = $request->title;
-        $project->description = $request->description;
-        $project->team_size = $request->team_size;
-        $project->due = $request->due;
-        $project->save();
+        $request->validated(); 
+        # when we create a project we also want to create a record in the users projects table
+        DB::transaction(function () use ($request) {
+            // creating project
+            $project = Project::create(
+                [
+                    'user_id' => $request->user()->id,
+                    'title' => $request->title,
+                    'description' => $request->description, 
+                    'team_size' => $request->team_size, 
+                    'due' => $request->due, 
+                    ]
+                );
 
-        return Redirect::route('projects.show', $project);
+            // creating record in users project table
+            UserProject::create([
+                'user_id' => $request->user()->id, 
+                'project_id' => $project->id,
+            ]);
+
+            return Redirect::route('projects.show', $project);
+        });
+
+        return Redirect::route('projects.index');
     }
 
     /**
@@ -95,14 +114,7 @@ class ProjectController extends Controller
      */
     public function update(Project $project, StoreProjectRequest $request)
     {
-        $validatedReqest = $request->validated();
-
-        $project->title = $validatedReqest['title'];
-        $project->description = $validatedReqest['description'];
-        $project->team_size = $validatedReqest['team_size'];
-        $project->due = $validatedReqest['due'];
-
-        $project->save();
+        Project::where('id', $project->id)->update($request->validated()); 
 
         return redirect()->route('projects.index')->with('message', 'Project was updated successfully');
     }

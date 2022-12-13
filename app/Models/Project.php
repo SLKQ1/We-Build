@@ -15,4 +15,11 @@ class Project extends Model
      * @var string
      */
     protected $table = 'projects';
+
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

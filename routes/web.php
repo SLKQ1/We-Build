@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\ProjectApplicationController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,8 +29,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $projects = Project::where('user_id', Auth::user()->id)->paginate(10); 
+    return Inertia::render('Dashboard', ['projects' => $projects]);
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified'); 
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
