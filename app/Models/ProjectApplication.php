@@ -9,10 +9,15 @@ class ProjectApplication extends Model
 {
     use HasFactory;
     
+    // Application statuses 
+    const PENDING = 0; 
+    const ACCEPTED = 1; 
+    const REJECTED = 2; 
+
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'project_applications';
+    protected $table = 'project_applications';  
 }

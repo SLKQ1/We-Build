@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjectApplication;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class ProjectApplicationController extends Controller
 {
@@ -23,7 +26,7 @@ class ProjectApplicationController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Applications/Create');
     }
 
     /**
@@ -34,7 +37,14 @@ class ProjectApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $application = new ProjectApplication();
+        $application->user_id = $request->user()->id;
+        $application->project_id = $request->project_id;
+        $application->application_description = $request->content;
+        $application->status = ProjectApplication::PENDING;
+        $application->save();
+
+        return Redirect::route('projects.show', $application);
     }
 
     /**
