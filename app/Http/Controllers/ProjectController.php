@@ -91,7 +91,8 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return Inertia::render('Projects/Show', ['project' => $project]);
+        $currentTeamSize = UserProject::where('project_id', $project->id)->count(); 
+        return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize]);
     }
 
     /**
