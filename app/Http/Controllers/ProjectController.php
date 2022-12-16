@@ -116,7 +116,6 @@ class ProjectController extends Controller
      */
     public function update(Project $project, StoreProjectRequest $request)
     {
-        Log::info('project', [$project]); 
         Project::where('id', $project->id)->update($request->validated()); 
 
         return redirect()->route('projects.index')->with('message', 'Project was updated successfully');
