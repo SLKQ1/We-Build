@@ -64,6 +64,7 @@ const form = useForm({
     description: null,
     team_size: 1,
     due: null,
+    status: 0, 
 })
 
 function submit() {

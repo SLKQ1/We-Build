@@ -29,7 +29,8 @@ class StoreProjectRequest extends FormRequest
             'title' => 'required|max:50',
             'description' => 'required|min:50',
             'team_size' => 'required|max:10',
-            'due' => 'nullable|date|after:today'
+            'due' => 'nullable|date|after:today', 
+            'status' => 'required'
         ];
     }
 }

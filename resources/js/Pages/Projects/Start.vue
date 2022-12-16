@@ -77,6 +77,7 @@ const form = useForm({
     description: props.project.description,
     team_size: props.project.team_size,
     due: null,
+    status: 1, 
 })
 
 function submit() {
