@@ -41,9 +41,7 @@ Route::get('/dashboard', function () {
 Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified'); 
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
 Route::get('projects/{project}/start', function ($project) {
-    $project = Project::where('id', $project)->firstOrFail(); 
-    $teamMembers = ProjectUser::where('project_id', $project->id)->get('user_id'); 
-
+    $project = Project::where('id', $project)->firstOrFail();  
     return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
 })->middleware(['auth', 'verified'])->name('projects.start');
 
