@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class UserProject extends Model
+class ProjectUser extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class UserProject extends Model
      *
      * @var string
      */
-    protected $table = 'user_projects';
+    protected $table = 'project_user';
 
     /**
      * The attributes that are mass assignable.

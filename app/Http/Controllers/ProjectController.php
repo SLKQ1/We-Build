@@ -6,7 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Resources\ProjectCollection;
 use App\Http\Resources\ProjectResource;
 use App\Models\Project;
-use App\Models\UserProject;
+use App\Models\ProjectUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -73,7 +73,7 @@ class ProjectController extends Controller
                 );
 
             // creating record in users project table
-            UserProject::create([
+            ProjectUser::create([
                 'user_id' => $request->user()->id, 
                 'project_id' => $project->id,
             ]);
@@ -92,7 +92,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $currentTeamSize = UserProject::where('project_id', $project->id)->count(); 
+        $currentTeamSize = ProjectUser::where('project_id', $project->id)->count(); 
         return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize]);
     }
 

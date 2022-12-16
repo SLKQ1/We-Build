@@ -4,7 +4,7 @@ use App\Http\Controllers\ProjectApplicationController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Project;
 use App\Models\User;
-use App\Models\UserProject;
+use App\Models\ProjectUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,10 +42,9 @@ Route::resource('projects', ProjectController::class)->except(['show', 'index'])
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
 Route::get('projects/{project}/start', function ($project) {
     $project = Project::where('id', $project)->firstOrFail(); 
-    $teamMembers = UserProject::where('project_id', $project->id)->get('user_id'); 
-    $users = User::whereIn('id', $teamMembers)->get(); 
+    $teamMembers = ProjectUser::where('project_id', $project->id)->get('user_id'); 
 
-    return Inertia::render('Projects/Start', ['project' => $project, 'team' => $users]); 
+    return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
 })->middleware(['auth', 'verified'])->name('projects.start');
 
 Route::resource('applications', ProjectApplicationController::class)->middleware('auth', 'verified'); 
