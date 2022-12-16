@@ -9,6 +9,11 @@ class Project extends Model
 {
     use HasFactory;
 
+    // Project statuses 
+    const OPEN = 0;
+    const IN_PROGRESS = 1;
+    const DONE = 2;
+
     /**
      * The table associated with the model.
      *
