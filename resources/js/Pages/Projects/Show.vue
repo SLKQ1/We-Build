@@ -9,7 +9,7 @@
     </template>
     <html lang="en" class="list-disc">
     <div class="m-4">
-      <div v-if="$page.props.auth.user.id === project.user_id" class="flex justify-end space-x-2">
+      <div v-if="$page.props.auth.user.id === project.user_id && project.status === 0" class="flex justify-end space-x-2">
         <Link :href="route('applications.index', { id: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         See applications
