@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('description'); 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); 
             $table->integer('team_size'); 
-            $table->dateTime('due'); 
+            $table->dateTime('due')->nullable(); 
             $table->bigInteger('points')->default(0); 
             $table->timestamps();
         });

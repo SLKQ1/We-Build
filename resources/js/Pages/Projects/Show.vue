@@ -10,9 +10,17 @@
     <html lang="en" class="list-disc">
     <div class="m-4">
       <div v-if="$page.props.auth.user.id === project.user_id" class="flex justify-end space-x-2">
-        <Link :href="route('projects.edit', { id: project.id })"
+        <Link :href="route('applications.index', { id: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+        See applications
+        </Link>
+        <Link :href="route('projects.edit', { id: project.id })"
+          class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-500 hover:bg-blue-700 rounded-lg">
         Edit
+        </Link>
+        <Link :href="route('projects.start', {id: project.id})"
+          class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 hover:bg-green-800 rounded-lg">
+        Start Project
         </Link>
       </div>
       <div class="flex flex-col gap-y-3 items-center justify-between">
@@ -22,7 +30,7 @@
             <strong> Team size: </strong>
             <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
           </p>
-          <p>
+          <p v-if="project.due">
             <strong> Due: </strong>
             <span>{{ formattedDueDate }} </span>
           </p>
@@ -31,7 +39,8 @@
           <p v-html="project.description">
           </p>
         </div>
-        <Link v-if="$page.props.auth.user.id !== project.user_id" :href="route('applications.create', {project_id: project.id})"
+        <Link v-if="$page.props.auth.user.id !== project.user_id"
+          :href="route('applications.create', { project_id: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Apply to project
         </Link>
@@ -43,7 +52,17 @@
   <GuestLayout v-else>
     <html lang="en" class="list-disc">
     <div class="flex flex-col gap-y-3 items-center justify-between">
-      <h1 class="font-semibold underline text-center text-5xl text-gray-800 py-4"> {{ project.title }} </h1>
+      <div class="text-center text-gray-800 py-4">
+        <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
+        <p>
+          <strong> Team size: </strong>
+          <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
+        </p>
+        <p v-if="project.due">
+          <strong> Due: </strong>
+          <span>{{ formattedDueDate }} </span>
+        </p>
+      </div>
       <div>
         <p v-html="project.description">
         </p>

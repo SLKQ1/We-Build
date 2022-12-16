@@ -28,7 +28,7 @@
                                     <EditorVue ref="editorReference" :description="form.description" />
                                     <InputError class="mt-2" :message="form.errors.description" />
                                 </div>
-                                <div>
+                                <div v-if="form.team_size < 2">
                                     <InputLabel for="due" value="Due Date" />
                                     <TextInput id="due" type="date" class="mt-1 block w-full" v-model="form.due"
                                         required autofocus />
@@ -38,7 +38,7 @@
                             <button type="submit"
                                 class="inline-flex items-center px-5 mt-3 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg"
                                 :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                Publish post
+                                Publish Project
                             </button>
                         </div>
                     </form>

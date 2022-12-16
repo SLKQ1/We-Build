@@ -25,11 +25,12 @@ class StoreProjectRequest extends FormRequest
      */
     public function rules()
     {
+        Log::info('trying to validate rules'); 
         return [
             'title' => 'required|max:50',
             'description' => 'required|min:50',
             'team_size' => 'required|max:10',
-            'due' => 'required|date|after:today'
+            'due' => 'nullable|date|after:today'
         ];
     }
 }
