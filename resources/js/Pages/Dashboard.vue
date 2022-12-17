@@ -6,10 +6,14 @@ import { ref } from "vue";
 import Pagination from '@/Components/Pagination.vue';
 
 let dashboardViewToDisplay = ref(3);
+let projectsToDisplay = ref(null)
 
 const props = defineProps({
     projects: Object
 })
+
+const startedProjects = props.projects.data.filter(p => p.status === 1)
+const completedProjects = props.projects.data.filter(p => p.status === 2)
 </script>
 
 <template>
@@ -63,6 +67,22 @@ const props = defineProps({
                                 Your Projects
                             </h2>
                             <div>
+                                <span @click="() => projectsToDisplay = null"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
+                                    All Projects
+                                </span>
+                                <span>|</span>
+                                <span @click="() => projectsToDisplay = 1"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
+                                    Started Projects
+                                </span>
+                                <span>|</span>
+                                <span @click="() => projectsToDisplay = 2"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
+                                    Completed Projects
+                                </span>
+                            </div>
+                            <div>
                                 <div class="flex justify-end mb-3">
                                     <Link :href="route('projects.create')"
                                         class="p-3 px-6 text-white bg-indigo-400 rounded-full hover:bg-indigo-600 cursor-pointer block">
@@ -70,8 +90,21 @@ const props = defineProps({
                                     </Link>
                                 </div>
                                 <div class="flex flex-col gap-y-3">
-                                    <ProjectList :projects="projects.data"></ProjectList>
-                                    <Pagination :links="projects.links"></Pagination>
+                                    <div v-if="projectsToDisplay === 2" >
+                                        <p>Completed Projects</p>
+                                        <ProjectList :projects="completedProjects"></ProjectList>
+                                        <Pagination :links="projects.links"></Pagination>
+                                    </div>
+                                    <div v-else-if="projectsToDisplay === 1">
+                                        <p>Started Projects</p>
+                                        <ProjectList :projects="startedProjects"></ProjectList>
+                                        <Pagination :links="projects.links"></Pagination>
+                                    </div>
+                                    <div v-else>
+                                        <p>All Projects</p>
+                                        <ProjectList :projects="projects.data"></ProjectList>
+                                        <Pagination :links="projects.links"></Pagination>
+                                    </div>
                                 </div>
                             </div>
                         </div>
