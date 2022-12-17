@@ -66,21 +66,19 @@ const completedProjects = props.projects.data.filter(p => p.status === 2)
                             <h2 class="font-semibold text-4xl text-gray-800 leading-tight">
                                 Your Projects
                             </h2>
-                            <div>
-                                <span @click="() => projectsToDisplay = null"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
-                                    All Projects
-                                </span>
-                                <span>|</span>
-                                <span @click="() => projectsToDisplay = 1"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
-                                    Started Projects
-                                </span>
-                                <span>|</span>
-                                <span @click="() => projectsToDisplay = 2"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer">
-                                    Completed Projects
-                                </span>
+                            <div class="flex flex-row justify-between gap-1">
+                                <div @click="() => projectsToDisplay = null"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
+                                    All
+                                </div>
+                                <div @click="() => projectsToDisplay = 1"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
+                                    Started
+                                </div>
+                                <div @click="() => projectsToDisplay = 2"
+                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
+                                    Completed
+                                </div>
                             </div>
                             <div>
                                 <div class="flex justify-end mb-3">
@@ -89,23 +87,23 @@ const completedProjects = props.projects.data.filter(p => p.status === 2)
                                     Create Project
                                     </Link>
                                 </div>
-                                <div class="flex flex-col gap-y-3">
-                                    <div v-if="projectsToDisplay === 2" >
-                                        <p>Completed Projects</p>
-                                        <ProjectList :projects="completedProjects"></ProjectList>
-                                        <Pagination :links="projects.links"></Pagination>
-                                    </div>
-                                    <div v-else-if="projectsToDisplay === 1">
-                                        <p>Started Projects</p>
-                                        <ProjectList :projects="startedProjects"></ProjectList>
-                                        <Pagination :links="projects.links"></Pagination>
-                                    </div>
-                                    <div v-else>
-                                        <p>All Projects</p>
-                                        <ProjectList :projects="projects.data"></ProjectList>
-                                        <Pagination :links="projects.links"></Pagination>
-                                    </div>
+
+                                <div v-if="projectsToDisplay === 2" class="flex flex-col gap-y-3">
+                                    <p class="font-semibold text-2xl">Completed Projects</p>
+                                    <ProjectList :projects="completedProjects"></ProjectList>
+                                    <Pagination :links="projects.links"></Pagination>
                                 </div>
+                                <div v-else-if="projectsToDisplay === 1" class="flex flex-col gap-y-3">
+                                    <p class="font-semibold text-2xl">Started Projects</p>
+                                    <ProjectList :projects="startedProjects"></ProjectList>
+                                    <Pagination :links="projects.links"></Pagination>
+                                </div>
+                                <div v-else class="flex flex-col gap-y-3">
+                                    <p class="font-semibold text-2xl">All Projects</p>
+                                    <ProjectList :projects="projects.data"></ProjectList>
+                                    <Pagination :links="projects.links"></Pagination>
+                                </div>
+
                             </div>
                         </div>
                     </div>
