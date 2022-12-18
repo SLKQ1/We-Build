@@ -41,7 +41,6 @@ class ProjectApplicationController extends Controller
         $application->user_id = $request->user()->id;
         $application->project_id = $request->project_id;
         $application->application_description = $request->content;
-        $application->status = ProjectApplication::PENDING;
         $application->save();
 
         return Redirect::route('projects.show', $application);
