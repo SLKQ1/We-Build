@@ -12,7 +12,7 @@ import GuestNavBar from '@/Layouts/GuestNavBar.vue'
             </div>
         </div>
 
-        <div>
+        <div class="p-6 m-4">
             <slot />
         </div>
     </div>

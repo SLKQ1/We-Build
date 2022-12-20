@@ -1,6 +1,14 @@
 <?php
 
+use App\Http\Controllers\ProjectApplicationController;
+use App\Http\Controllers\ProjectController;
+use App\Models\Project;
+use App\Models\User;
+use App\Models\ProjectUser;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,12 +33,19 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $projects = Project::where('user_id', Auth::user()->id)->paginate(10); 
+    return Inertia::render('Dashboard', ['projects' => $projects]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/projects', function () {
-    return Inertia::render('Projects');
-})->name('projects');
+
+Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified'); 
+Route::resource('projects', ProjectController::class)->only(['show', 'index']);
+Route::get('projects/{project}/start', function ($project) {
+    $project = Project::where('id', $project)->firstOrFail();  
+    return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
+})->middleware(['auth', 'verified'])->name('projects.start');
+
+Route::resource('applications', ProjectApplicationController::class)->middleware('auth', 'verified'); 
 
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Hamburger Menu */
 .hamburger {
     cursor: pointer;
@@ -47,4 +51,44 @@
 
 .open .hamburger-bottom {
     transform: rotate(-45deg) translateY(6px) translate(-6px);
+}
+
+@layer base {
+    h1 {
+        @apply text-4xl;
+        @apply my-3;
+    }
+
+    h2 {
+        @apply text-2xl;
+        @apply my-3;
+    }
+
+    h3 {
+        @apply text-xl;
+        @apply my-3;
+    }
+
+    ol {
+        @apply ml-3;
+        @apply my-3;
+        @apply list-decimal;
+    }
+
+    ul {
+        @apply ml-3;
+        @apply my-3;
+        @apply list-disc;
+    }
+
+    code {
+        @apply bg-black;
+        @apply text-gray-300;
+        @apply p-2;
+        @apply rounded-lg;
+    }
+
+    pre {
+        @apply my-5;
+    }
 }
