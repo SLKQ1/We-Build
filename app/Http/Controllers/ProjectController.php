@@ -3,16 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
-use App\Http\Resources\ProjectCollection;
-use App\Http\Resources\ProjectResource;
 use App\Models\Project;
 use App\Models\ProjectUser;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -24,7 +18,7 @@ class ProjectController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Project::class, 'project');
+        $this->authorizeResource(Project::class, null, ['except' => ['index', 'show']]);
     }
 
     /**
@@ -57,7 +51,6 @@ class ProjectController extends Controller
      */
     public function store(Project $project, StoreProjectRequest $request)
     {
-        $request->validated(); 
         # when we create a project we also want to create a record in the users projects table
         DB::transaction(function () use ($request) {
             // creating project
@@ -65,16 +58,16 @@ class ProjectController extends Controller
                 [
                     'user_id' => $request->user()->id,
                     'title' => $request->title,
-                    'description' => $request->description, 
-                    'team_size' => $request->team_size, 
-                    'due' => $request->due, 
+                    'description' => $request->description,
+                    'team_size' => $request->team_size,
+                    'due' => $request->due,
                     'status' => $request->status
-                    ]
-                );
+                ]
+            );
 
             // creating record in users project table
             ProjectUser::create([
-                'user_id' => $request->user()->id, 
+                'user_id' => $request->user()->id,
                 'project_id' => $project->id,
             ]);
 
@@ -92,7 +85,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        $currentTeamSize = ProjectUser::where('project_id', $project->id)->count(); 
+        $currentTeamSize = ProjectUser::where('project_id', $project->id)->count();
         return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize]);
     }
 
@@ -116,7 +109,7 @@ class ProjectController extends Controller
      */
     public function update(Project $project, StoreProjectRequest $request)
     {
-        Project::where('id', $project->id)->update($request->validated()); 
+        Project::where('id', $project->id)->update($request->validated());
 
         return redirect()->route('projects.index')->with('message', 'Project was updated successfully');
     }

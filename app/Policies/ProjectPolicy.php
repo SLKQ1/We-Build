@@ -42,7 +42,7 @@ class ProjectPolicy
      */
     public function create(User $user)
     {
-        return $user; 
+        return true; 
     }
 
     /**
