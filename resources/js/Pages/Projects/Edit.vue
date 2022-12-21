@@ -68,7 +68,8 @@ const form = useForm({
     title: props.project.title,
     description: props.project.description,
     team_size: props.project.team_size,
-    due: moment(props.project.due).format('YYYY-MM-DD'),
+    due: props.project.due ? moment(props.project.due).format('YYYY-MM-DD') : null, 
+    status: props.project.status, 
 })
 
 function submit() {
