@@ -75,10 +75,10 @@
         <p v-html="project.description">
         </p>
       </div>
-      <button type="submit"
+      <Link :href="route('applications.create', { project_id: project.id })"
         class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
-        Apply to project
-      </button>
+      Apply to project
+      </Link>
     </div>
 
     </html>
