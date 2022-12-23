@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -52,29 +53,36 @@ class ProjectController extends Controller
     public function store(Project $project, StoreProjectRequest $request)
     {
         # when we create a project we also want to create a record in the users projects table
-        DB::transaction(function () use ($request) {
-            // creating project
-            $project = Project::create(
-                [
+        try {
+            $project = DB::transaction(function () use ($request) {
+                // creating project
+                $project = Project::create(
+                    [
+                        'user_id' => $request->user()->id,
+                        'title' => $request->title,
+                        'description' => $request->description,
+                        'team_size' => $request->team_size,
+                        'due' => $request->due,
+                        'status' => $request->status
+                    ]
+                );
+    
+                // creating record in users project table
+                ProjectUser::create([
                     'user_id' => $request->user()->id,
-                    'title' => $request->title,
-                    'description' => $request->description,
-                    'team_size' => $request->team_size,
-                    'due' => $request->due,
-                    'status' => $request->status
-                ]
-            );
+                    'project_id' => $project->id,
+                ]);
 
-            // creating record in users project table
-            ProjectUser::create([
-                'user_id' => $request->user()->id,
-                'project_id' => $project->id,
-            ]);
+                return $project; 
+    
+            });
 
-            return Redirect::route('projects.show', $project);
-        });
+            return Redirect::route('projects.show', $project)->with('message', 'Project created successfully');
+        
+        } catch (\Exception $exception) {
+            return Redirect::route('projects.index')->with('error', "Unable to create project. {$exception}");
+        }
 
-        return Redirect::route('projects.index');
     }
 
     /**
