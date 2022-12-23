@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectApplication extends Model
+class Application extends Model
 {
     use HasFactory;
     
@@ -19,5 +19,12 @@ class ProjectApplication extends Model
      *
      * @var string
      */
-    protected $table = 'project_applications';  
+    protected $table = 'applications';
+    
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
 }

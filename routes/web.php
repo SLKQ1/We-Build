@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProjectApplicationController;
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Project;
 use App\Models\User;
@@ -45,7 +45,7 @@ Route::get('projects/{project}/start', function ($project) {
     return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
 })->middleware(['auth', 'verified'])->name('projects.start');
 
-Route::resource('applications', ProjectApplicationController::class)->middleware('auth', 'verified'); 
+Route::resource('applications', ApplicationController::class)->middleware('auth', 'verified'); 
 
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');
