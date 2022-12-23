@@ -45,9 +45,12 @@ class ApplicationPolicy
     public function create(User $user, int $project_id)
     {
         // check if user has not already applied to this project
-        return !Application::where('user_id', $user->id)->where('project_id', $project_id)->exists()
+        $isFirstTimeApplying = !Application::where('user_id', $user->id)->where('project_id', $project_id)->exists(); 
+        $isOwnerOfProject = Project::where('id', $project_id)->where('user_id', $user->id)->exists(); 
+
+        return $isFirstTimeApplying && !$isOwnerOfProject
             ? Response::allow()
-            : Response::deny('You have already applied to this project.');
+            : Response::deny('You have already applied to this project or you are the owner of this project.');
     }
 
     /**
