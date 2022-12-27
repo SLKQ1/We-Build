@@ -1,14 +1,14 @@
 <template>
-    <div v-for="project in projects" :key="project.id">
-        <Card :item="project">
+    <div v-for="application in applications" :key="application.id">
+        <Card :item="application">
             <template v-slot:title>
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ project.title }} </h5>
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ application.user.name }} </h5>
             </template>
             <template v-slot:description>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400" v-html="useTruncate(project.description, 200, '...')"> </p>
+                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> {{ application.user.name }} applied to your project! </p>
             </template>
             <template v-slot:button>
-                <Link :href="route('projects.show', { id: project.id })"
+                <Link :href="route('projects.applications.show', { application: application.id, project: project.id })"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-indigo-400 rounded-lg hover:bg-indigo-600">
                 Check it out!
                 </Link>
@@ -20,9 +20,9 @@
 <script setup>
 import Card from "@/Components/Card.vue";
 import { Link } from '@inertiajs/inertia-vue3'
-import { useTruncate } from "@/Composables/truncateStrings";
 
 const props = defineProps({
-    projects: Object
+    applications: Object, 
+    project: Object, 
 })
 </script>
