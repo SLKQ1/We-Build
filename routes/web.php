@@ -45,7 +45,12 @@ Route::get('projects/{project}/start', function ($project) {
     return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
 })->middleware(['auth', 'verified'])->name('projects.start');
 
-Route::resource('applications', ApplicationController::class)->middleware('auth', 'verified'); 
+// Project application routes
+Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index'); 
+Route::get('projects/{project}/applications/{application}', [ApplicationController::class, 'show'])->name('projects.applications.show'); 
+Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create'); 
+Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store'); 
+
 
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');

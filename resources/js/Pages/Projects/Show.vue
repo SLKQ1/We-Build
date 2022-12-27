@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="space-x-2">
-          <Link :href="route('applications.index', { id: project.id })"
+          <Link :href="route('projects.applications.index', { project: project.id })"
             class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
           See applications
           </Link>
@@ -48,7 +48,7 @@
           </p>
         </div>
         <Link v-if="$page.props.auth.user.id !== project.user_id"
-          :href="route('applications.create', { project_id: project.id })"
+          :href="route('projects.applications.create', { project: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Apply to project
         </Link>
