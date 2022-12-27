@@ -19,9 +19,10 @@ class ApplicationPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewAny(User $user, Project $project)
     {
-        //
+        // checking if user is owner of project
+        return Project::where('id', $project->id)->where('user_id', $user->id)->exists(); 
     }
 
     /**

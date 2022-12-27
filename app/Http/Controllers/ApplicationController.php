@@ -20,9 +20,12 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(Project $project)
+    {   
+        $this->authorize('viewAny', [Application::class, $project]); 
+    
+        $applications = $project->applications()->with('user')->orderBy('created_at', 'asc')->paginate(5); 
+        return Inertia::render('Applications/Index', ['project' => $project, 'applications' => $applications]);
     }
 
     /**
@@ -30,15 +33,9 @@ class ApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
-        $validated = $request->validate([
-            'project_id' => 'bail|required',
-        ]);
-        
-        $this->authorize('create', [Application::class, $request->get('project_id')]); 
-
-        $project = Project::where('id', $validated['project_id'])->firstOrFail();
+    public function create(Project $project)
+    {   
+        $this->authorize('create', [Application::class, $project->id]); 
 
         return Inertia::render('Applications/Create', ['project' => $project]);
     }
@@ -51,7 +48,6 @@ class ApplicationController extends Controller
      */
     public function store(Request $request)
     {
-        
         $validated = $request->validate([
             'project_id' => 'bail|required',
             'description' => 'nullable',
@@ -65,7 +61,6 @@ class ApplicationController extends Controller
         $description = $validated['description'];
         $file = $validated['resume'];
         $fileName = $file->getClientOriginalName();
-        $user = null; 
 
         if ($user) {
             $file->storeAs("resumes/project_{$projectId}/user_{$user->id}", $fileName, 's3');
