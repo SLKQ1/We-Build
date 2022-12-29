@@ -7,7 +7,7 @@
                 </h2>
                 <div class="flex flex-row justify-between gap-5">
                     <div @click="() => filter = null">
-                        <NavLink :href="route('dashboard.projects')" :active="filter == null"
+                        <NavLink :href="route('dashboard.projects')" :active="filter === null"
                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                             All
                         </NavLink>
@@ -69,7 +69,7 @@ const props = defineProps({
     projects: Object,
 })
 
-let filter = ref('')
+let filter = ref(null)
 
 watch(filter, value => {
     Inertia.get('',

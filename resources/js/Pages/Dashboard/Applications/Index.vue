@@ -103,7 +103,7 @@ const props = defineProps({
     applications: Object,
 })
 
-let filter = ref('')
+let filter = ref(null)
 
 watch(filter, value => {
     Inertia.get('',
