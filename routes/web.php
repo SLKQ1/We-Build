@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Application as ApplicationModel;
+use Illuminate\Foundation\Application;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\ProjectUser;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,28 +33,63 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    $projects = Project::where('user_id', Auth::user()->id)->paginate(10); 
-    return Inertia::render('Dashboard', ['projects' => $projects]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Dashboard routes
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard/Home');
+    })->name('dashboard');
+    
+    Route::get('/dashboard/projects/points', function () {
+        return Inertia::render('Dashboard/UserPoints');
+    })->name('dashboard.points');
+    
+    Route::get('/dashboard/projects/team_points', function () {
+        return Inertia::render('Dashboard/TeamPoints');
+    })->name('dashboard.team_points');
+    
+    Route::get('/dashboard/projects', function () {
+        $projects = Project::query()
+            ->whereIn('id', function ($query) {
+                $query->select('project_id')->from('project_user')->where('user_id', Auth::user()->id);
+            })
+            ->when(Request::input('filter'), function ($query, $filter) {
+                switch ($filter) {
+                    case '1': 
+                    case '2': 
+                        $query->where('status', $filter);
+                        break;
+                }
+    
+            })
+            ->paginate(10);
+    
+        return Inertia::render('Dashboard/UserProjects', ['projects' => $projects]);
+    })->name('dashboard.projects');
+    
+    Route::get('/dashboard/applications', function () {
+        $applications = ApplicationModel::where('user_id', Auth::user()->id)->paginate(10); 
+        return Inertia::render('Dashboard/Applications', ['applications' => $applications]); 
+    })->name('dashboard.applications');
+    
+    // Project routes
+    Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified');
+    Route::get('projects/{project}/start', function ($project) {
+        $project = Project::where('id', $project)->firstOrFail();
+        return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]);
+    })->middleware(['auth', 'verified'])->name('projects.start');
 
+    // Project application routes
+    Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
+    Route::get('projects/{project}/applications/{application}', [ApplicationController::class, 'show'])->name('projects.applications.show');
+    Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
+    Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
+});
 
-Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified'); 
+// Project routes
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
-Route::get('projects/{project}/start', function ($project) {
-    $project = Project::where('id', $project)->firstOrFail();  
-    return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]); 
-})->middleware(['auth', 'verified'])->name('projects.start');
-
-// Project application routes
-Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index'); 
-Route::get('projects/{project}/applications/{application}', [ApplicationController::class, 'show'])->name('projects.applications.show'); 
-Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create'); 
-Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store'); 
-
 
 Route::get('/leaderboards', function () {
     return Inertia::render('Leaderboards');
 })->name('leaderboards');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
