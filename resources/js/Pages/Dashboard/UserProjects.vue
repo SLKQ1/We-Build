@@ -27,17 +27,17 @@
                         </Link>
                     </div>
                     <div>
-                        <div v-if="filter === 1" class="flex flex-col gap-y-3">
+                        <div v-if="filter === 1" class="flex flex-col gap-y-3 items-center">
                             <p class="font-semibold text-2xl">Started Projects</p>
                             <ProjectList :projects="projects.data"></ProjectList>
                             <Pagination :links="projects.links"></Pagination>
                         </div>
-                        <div v-else-if="filter === 2" class="flex flex-col gap-y-3">
+                        <div v-else-if="filter === 2" class="flex flex-col gap-y-3 items-center">
                             <p class="font-semibold text-2xl">Completed Projects</p>
                             <ProjectList :projects="projects.data"></ProjectList>
                             <Pagination :links="projects.links"></Pagination>
                         </div>
-                        <div v-else class="flex flex-col gap-y-3">
+                        <div v-else class="flex flex-col gap-y-3 items-center">
                             <p class="font-semibold text-2xl">Completed Projects</p>
                             <ProjectList :projects="projects.data"></ProjectList>
                             <Pagination :links="projects.links"></Pagination>

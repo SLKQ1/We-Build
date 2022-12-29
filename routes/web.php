@@ -53,13 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $query->select('project_id')->from('project_user')->where('user_id', Auth::user()->id);
             })
             ->when(Request::input('filter'), function ($query, $filter) {
-                switch ($filter) {
-                    case '1': 
-                    case '2': 
-                        $query->where('status', $filter);
-                        break;
-                }
-    
+                $query->where('status', $filter);
             })
             ->paginate(10);
     
@@ -67,8 +61,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard.projects');
     
     Route::get('/dashboard/applications', function () {
-        $applications = ApplicationModel::where('user_id', Auth::user()->id)->paginate(10); 
-        return Inertia::render('Dashboard/Applications', ['applications' => $applications]); 
+        $applications = ApplicationModel::query()
+            ->with('project')
+            ->where('user_id', Auth::user()->id)
+            ->when(Request::input('filter'), function ($query, $filter) {
+                $query->where('status', $filter);
+            })
+            ->paginate(10); 
+        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications]); 
     })->name('dashboard.applications');
     
     // Project routes
