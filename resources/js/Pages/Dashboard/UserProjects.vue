@@ -5,18 +5,24 @@
                 <h2 class="font-semibold text-4xl text-gray-800 leading-tight">
                     Your Projects
                 </h2>
-                <div class="flex flex-row justify-between gap-1">
-                    <div @click="() => filter = null"
-                        class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                        All
+                <div class="flex flex-row justify-between gap-5">
+                    <div @click="() => filter = null">
+                        <NavLink :href="route('dashboard.projects')" :active="filter == null"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            All
+                        </NavLink>
                     </div>
-                    <div @click="() => filter = 1"
-                        class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                        Started
+                    <div @click="() => filter = 1">
+                        <NavLink :href="route('dashboard.projects')" :active="filter == 1"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Started
+                        </NavLink>
                     </div>
-                    <div @click="() => filter = 2"
-                        class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                        Completed
+                    <div @click="() => filter = 2">
+                        <NavLink :href="route('dashboard.projects')" :active="filter == 2"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Completed
+                        </NavLink>
                     </div>
                 </div>
                 <div>
@@ -51,6 +57,7 @@
 
 <script setup>
 import { Link } from '@inertiajs/inertia-vue3';
+import NavLink from '@/Components/NavLink.vue';
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { watch } from 'vue';

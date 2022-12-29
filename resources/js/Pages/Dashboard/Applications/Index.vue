@@ -10,9 +10,9 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-around p-6 bg-white border-b border-gray-200">
-                        <Link class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
-                        Your Applications
-                        </Link>
+                        <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Your Applications
+                        </NavLink>
                     </div>
                 </div>
             </div>
@@ -27,25 +27,34 @@
                             <h2 class="font-semibold text-4xl text-gray-800 leading-tight">
                                 Your Applications
                             </h2>
-                            <div class="flex flex-row justify-between gap-1">
-                                <div @click="() => filter = null"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                                    All
+                            <div class="flex flex-row justify-between gap-5 mb-4">
+                                <div @click="() => filter = null">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == null"
+                                        class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                        All
+                                    </NavLink>
                                 </div>
-                                <div @click="() => filter = 0"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                                    Pending
+                                <div @click="() => filter = 0">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == 0"
+                                        class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                        Pending
+                                    </NavLink>
                                 </div>
-                                <div @click="() => filter = 1"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                                    Accepted
+                                <div @click="() => filter = 1">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == 1"
+                                        class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                        Accepted
+                                    </NavLink>
                                 </div>
-                                <div @click="() => filter = 3"
-                                    class="basis-1/4 hover:bg-indigo-300 hover:rounded-md cursor-pointer px-5 underline">
-                                    Rejected
+                                <div @click="() => filter = 2">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == 2"
+                                        class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                        Completed
+                                    </NavLink>
                                 </div>
                             </div>
                         </div>
+
 
                         <div v-for="application in applications.data" :key="application.id">
                             <Card :item="application">
@@ -68,7 +77,12 @@
                                 </template>
                             </Card>
                         </div>
+                        <div v-if="!applications.data.length" class="text-center text-2xl mb-4">
+                            <p>No Applications</p>
+                        </div>
+                        <Pagination :links="applications.links" class="flex flex-col gap-y-3 items-center"></Pagination>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -79,9 +93,22 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import Pagination from '@/Components/Pagination.vue';
-import ApplicationList from '@/Components/ApplicationList.vue';
 import Card from '@/Components/Card.vue';
+import { ref } from 'vue';
+import { watch } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
+import NavLink from '@/Components/NavLink.vue';
+
 const props = defineProps({
     applications: Object,
+})
+
+let filter = ref('')
+
+watch(filter, value => {
+    Inertia.get('',
+        { filter: value },
+        { preserveState: true }
+    )
 })
 </script>

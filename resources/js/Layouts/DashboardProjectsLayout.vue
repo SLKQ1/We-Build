@@ -13,18 +13,18 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-around p-6 bg-white border-b border-gray-200">
-                        <Link :href="route('dashboard.team_points')"
-                            class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
-                        Team Points
-                        </Link>
-                        <Link :href="route('dashboard.points')"
-                            class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
-                        Your Points
-                        </Link>
-                        <Link :href="route('dashboard.projects')"
-                            class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
-                        Your Projects
-                        </Link>
+                        <NavLink :href="route('dashboard.team_points')" :active="route().current('dashboard.team_points')"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Team Points
+                        </NavLink>
+                        <NavLink :href="route('dashboard.points')" :active="route().current('dashboard.points')"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Your Points
+                        </NavLink>
+                        <NavLink :href="route('dashboard.projects')" :active="route().current('dashboard.projects')"
+                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                            Your Projects
+                        </NavLink>
                     </div>
                 </div>
             </div>
@@ -45,4 +45,5 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/inertia-vue3';
+import NavLink from '@/Components/NavLink.vue';
 </script>
