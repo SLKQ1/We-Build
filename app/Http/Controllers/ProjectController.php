@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Models\Application;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -94,7 +96,12 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $currentTeamSize = ProjectUser::where('project_id', $project->id)->count();
-        return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize]);
+        $hasApplied = false; 
+        if (Auth::user()) {
+            $hasApplied = Application::where('project_id', $project->id)->where('user_id', Auth::user()->id)->exists(); 
+        }
+        
+        return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize, 'hasApplied' => $hasApplied]);
     }
 
     /**

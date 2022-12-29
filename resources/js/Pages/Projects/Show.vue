@@ -47,7 +47,7 @@
           <p v-html="project.description">
           </p>
         </div>
-        <Link v-if="$page.props.auth.user.id !== project.user_id"
+        <Link v-if="$page.props.auth.user.id !== project.user_id && !hasApplied"
           :href="route('projects.applications.create', { project: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Apply to project
@@ -75,7 +75,7 @@
         <p v-html="project.description">
         </p>
       </div>
-      <Link :href="route('applications.create', { project_id: project.id })"
+      <Link :href="route('projects.applications.create', { project: project.id })"
         class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
       Apply to project
       </Link>
@@ -96,6 +96,7 @@ import { Inertia } from '@inertiajs/inertia';
 const props = defineProps({
   project: Object,
   currentTeamSize: Number,
+  hasApplied: Boolean, 
 })
 
 const formattedDueDate = moment(props.project.due).format('YYYY-MM-DD')
