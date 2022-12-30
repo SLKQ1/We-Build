@@ -101,9 +101,10 @@ import NavLink from '@/Components/NavLink.vue';
 
 const props = defineProps({
     applications: Object,
+    filter: String, 
 })
 
-let filter = ref(null)
+let filter = ref(props.filter)
 
 watch(filter, value => {
     Inertia.get('',

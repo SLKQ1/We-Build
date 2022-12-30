@@ -55,9 +55,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->when(Request::input('filter'), function ($query, $filter) {
                 $query->where('status', $filter);
             })
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString(); 
     
-        return Inertia::render('Dashboard/UserProjects', ['projects' => $projects]);
+        return Inertia::render('Dashboard/UserProjects', ['projects' => $projects, 'filter' => Request::input('filter')]);
     })->name('dashboard.projects');
     
     Route::get('/dashboard/applications', function () {
@@ -67,8 +68,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->when(Request::input('filter'), function ($query, $filter) {
                 $query->where('status', $filter);
             })
-            ->paginate(10); 
-        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications]); 
+            ->paginate(10)
+            ->withQueryString(); 
+
+        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications, 'filter' => Request::input('filter')]); 
     })->name('dashboard.applications');
     
     // Project routes
@@ -81,8 +84,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Project application routes
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
     Route::get('projects/{project}/applications/{application}', [ApplicationController::class, 'show'])->name('projects.applications.show');
+    Route::get('projects/{project}/applications/{application}/resume', [ApplicationController::class, 'downloadResume'])->name('projects.applications.downloadResume');
     Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
     Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
+    Route::post('projects/{project}/application/update', [ApplicationController::class, 'update'])->name('projects.applications.update');
 });
 
 // Project routes

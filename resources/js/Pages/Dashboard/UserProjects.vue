@@ -67,9 +67,10 @@ import DashboardProjectsLayout from '@/Layouts/DashboardProjectsLayout.vue';
 
 const props = defineProps({
     projects: Object,
+    filter: String, 
 })
 
-let filter = ref(null)
+let filter = ref(props.filter)
 
 watch(filter, value => {
     Inertia.get('',
@@ -77,5 +78,4 @@ watch(filter, value => {
         { preserveState: true }
     )
 })
-
 </script>
