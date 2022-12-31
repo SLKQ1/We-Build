@@ -21,10 +21,10 @@ class ApplicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Project $project)
-    {   
-        $this->authorize('viewAny', [Application::class, $project]); 
-    
-        $applications = $project->applications()->with('user')->orderBy('created_at', 'asc')->paginate(5); 
+    {
+        $this->authorize('viewAny', [Application::class, $project]);
+
+        $applications = $project->applications()->with('user')->orderBy('created_at', 'asc')->paginate(10);
         return Inertia::render('Applications/Index', ['project' => $project, 'applications' => $applications]);
     }
 
@@ -34,8 +34,8 @@ class ApplicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Project $project)
-    {   
-        $this->authorize('create', [Application::class, $project->id]); 
+    {
+        $this->authorize('create', [Application::class, $project]);
 
         return Inertia::render('Applications/Create', ['project' => $project]);
     }
@@ -54,8 +54,9 @@ class ApplicationController extends Controller
             'resume' => 'required',
         ]);
         
-        $this->authorize('create', [Application::class, $validated['project_id']]); 
-        
+        $project = Project::where('id', $validated['project_id'])->firstOrFail();
+        $this->authorize('create', [Application::class, $project]);
+
         $user = $request->user();
         $projectId = $validated['project_id'];
         $description = $validated['description'];
@@ -72,9 +73,9 @@ class ApplicationController extends Controller
                     'resume_file_path' => "resumes/project_{$projectId}/user_{$user->id}/{$fileName}",
                 ]
             );
-            return redirect()->route('projects.index')->with('message', 'You successfully applied to the project.'); 
+            return redirect()->route('projects.index')->with('message', 'You successfully applied to the project.');
         } else {
-            return redirect()->route('projects.index')->with('error', 'Unable to create your application.'); 
+            return redirect()->route('projects.index')->with('error', 'Unable to create your application.');
         }
     }
 

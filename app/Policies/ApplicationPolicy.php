@@ -22,7 +22,9 @@ class ApplicationPolicy
     public function viewAny(User $user, Project $project)
     {
         // checking if user is owner of project
-        return Project::where('id', $project->id)->where('user_id', $user->id)->exists(); 
+        return Project::where('id', $project->id)->where('user_id', $user->id)->exists()
+            ? Response::allow()
+            : Response::deny("You are not authorized to view applications for this project.");
     }
 
     /**
@@ -32,9 +34,15 @@ class ApplicationPolicy
      * @param  \App\Models\Application  $application
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Application $application)
+    public function view(User $user, Project $project, Application $application)
     {
-        //
+        $isApplicationIsForProject = $project->id == $application->project->id;
+        $isOwnerOfProject = Project::where('id', $project->id)->where('user_id', $user->id)->exists(); 
+        $isOwnerOfApplication = $application->user_id == $user->id; 
+        # checking if user is owner of the project 
+        return $isApplicationIsForProject && ($isOwnerOfApplication || $isOwnerOfProject)
+            ? Response::allow()
+            : Response::deny("You are not authorized to view this application.");
     }
 
     /**
@@ -43,15 +51,16 @@ class ApplicationPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user, int $project_id)
+    public function create(User $user, Project $project)
     {
         // check if user has not already applied to this project
-        $isFirstTimeApplying = !Application::where('user_id', $user->id)->where('project_id', $project_id)->exists(); 
-        $isOwnerOfProject = Project::where('id', $project_id)->where('user_id', $user->id)->exists(); 
+        $isFirstTimeApplying = !Application::where('user_id', $user->id)->where('project_id', $project->id)->exists();
+        $isOwnerOfProject = Project::where('id', $project->id)->where('user_id', $user->id)->exists();
+        $isProjectStarted = $project->status === 1;
 
-        return $isFirstTimeApplying && !$isOwnerOfProject
+        return !$isProjectStarted && $isFirstTimeApplying && !$isOwnerOfProject
             ? Response::allow()
-            : Response::deny('You have already applied to this project or you are the owner of this project.');
+            : Response::deny('You are not authorized to apply to this project.');
     }
 
     /**
