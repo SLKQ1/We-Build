@@ -10,9 +10,12 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
-                        <div class="flex flex-col gap-y-3">
+                        <div v-if="applications.data.length" class="flex flex-col gap-y-3">
                             <ApplicationList :applications="applications.data" :project="project"></ApplicationList>
                             <Pagination class="m-auto mt-10" :links="applications.links"></Pagination>
+                        </div>
+                        <div v-else class="flex flex-col gap-y-3">
+                            <p>No applications</p>
                         </div>
                     </div>
                 </div>

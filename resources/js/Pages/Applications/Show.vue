@@ -35,7 +35,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div v-if="isProjectOwner()" class="flex flex-row mx-auto gap-4">
+                        <div v-if="isProjectOwner() && application.status === 0" class="flex flex-row mx-auto gap-4">
                             <div @click="acceptApplication"
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 hover:cursor-pointer rounded-lg">
                                 Accept
@@ -44,6 +44,12 @@
                                 class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-600 hover:bg-red-800 hover:cursor-pointer rounded-lg">
                                 Reject
                             </div>
+                        </div>
+                        <div v-else-if="isProjectOwner() && application.status == 1" class="text-center bg-green-300 rounded font-bold mt-5">
+                            <p>You have accepted this application</p>
+                        </div>
+                        <div v-else-if="isProjectOwner() && application.status == 2" class="text-center bg-red-300 rounded font-bold mt-5">
+                            <p>You have rejected this application</p>
                         </div>
                     </div>
                 </div>
@@ -59,7 +65,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, useForm, usePage } from '@inertiajs/inertia-vue3';
+import { Head, usePage } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     application: Object,
@@ -67,17 +73,12 @@ const props = defineProps({
     user: String,
 })
 
-const form = useForm({
-    status: 0, 
-})
-
 function acceptApplication() {
-    form.status = 1
-    Inertia.put(route("projects.applications.accept", { project: props.project.id, application: props.application.id}));
+    Inertia.put(route("projects.applications.updateApplicationStatus", { project: props.project.id, application: props.application.id, status: 1}));
 }
 
 function rejectApplication() {
-    form.status = 1
+    Inertia.put(route("projects.applications.updateApplicationStatus", { project: props.project.id, application: props.application.id, status: 2}));
 }
 
 function isProjectOwner() {

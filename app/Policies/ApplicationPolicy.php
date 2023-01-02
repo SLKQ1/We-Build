@@ -37,8 +37,8 @@ class ApplicationPolicy
     public function view(User $user, Project $project, Application $application)
     {
         $isApplicationIsForProject = $project->id == $application->project->id;
-        $isOwnerOfProject = Project::where('id', $project->id)->where('user_id', $user->id)->exists(); 
-        $isOwnerOfApplication = $application->user_id == $user->id; 
+        $isOwnerOfProject = Project::where('id', $project->id)->where('user_id', $user->id)->exists();
+        $isOwnerOfApplication = $application->user_id == $user->id;
         # checking if user is owner of the project 
         return $isApplicationIsForProject && ($isOwnerOfApplication || $isOwnerOfProject)
             ? Response::allow()
@@ -70,9 +70,14 @@ class ApplicationPolicy
      * @param  \App\Models\Application  $application
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Application $application)
+    public function update(User $user, Project $project, Application $application)
     {
-        //
+        //   
+    }
+
+    public function acceptOrReject(User $user, Project $project, Application $application)
+    {   
+        return Project::where('id', $project->id)->where('user_id', $user->id)->exists();
     }
 
     /**

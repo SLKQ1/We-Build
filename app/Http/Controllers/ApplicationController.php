@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreApplicationRequest;
 use App\Models\Application;
 use App\Models\Project;
-use Aws\S3\S3Client;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -53,7 +51,7 @@ class ApplicationController extends Controller
             'description' => 'nullable',
             'resume' => 'required',
         ]);
-        
+
         $project = Project::where('id', $validated['project_id'])->firstOrFail();
         $this->authorize('create', [Application::class, $project]);
 
@@ -85,9 +83,16 @@ class ApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project, Application $application)
     {
-        //
+        $this->authorize('view', [Application::class, $project, $application]);
+        return Inertia::render('Applications/Show', ['application' => $application, 'project' => $project, 'user' => $application->user->name]);
+    }
+
+    public function downloadResume(Project $project, Application $application)
+    {
+        $fileName = "{$application->user->name}'s application for {$project->title}";
+        return Storage::disk('s3')->download($application->resume_file_path, $fileName);
     }
 
     /**
@@ -108,11 +113,38 @@ class ApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Project $project, Request $request)
     {
-        //
+        $validated = $request->validate([
+            'status' => 'bail|required',
+        ]);
+
+
+        return redirect()->route('project.applications.index', ['project' => $project])->with('message', 'You have updated your application.');
     }
 
+    /**
+     * Accept or reject application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateApplicationStatus(Project $project, Application $application, Request $request)
+    {
+        $validated = $request->validate([
+            'status' => 'bail|required',
+        ]);
+
+        $this->authorize('acceptOrReject', [Application::class, $project, $application]);
+        $application->update($validated);
+
+        if ($validated['status'] == '1') {
+            return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have accepted {$application->user->name}'s application.");
+        } else {
+            return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have rejected {$application->user->name}'s application.");
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
