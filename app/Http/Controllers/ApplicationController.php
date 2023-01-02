@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\Project;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -22,8 +22,16 @@ class ApplicationController extends Controller
     {
         $this->authorize('viewAny', [Application::class, $project]);
 
-        $applications = $project->applications()->with('user')->orderBy('created_at', 'asc')->paginate(10);
-        return Inertia::render('Applications/Index', ['project' => $project, 'applications' => $applications]);
+        $applications = $project->applications()
+        ->with('user')
+        ->orderBy('created_at', 'asc')
+        ->when(Request::input('filter'), function ($query, $filter) {
+            $query->where('status', $filter);
+        })
+        ->paginate(10)
+        ->withQueryString(); 
+
+        return Inertia::render('Applications/Index', ['project' => $project, 'applications' => $applications, 'filter' => Request::input('filter')]);
     }
 
     /**
