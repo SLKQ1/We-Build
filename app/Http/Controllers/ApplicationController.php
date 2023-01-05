@@ -8,6 +8,7 @@ use App\Models\ProjectUser;
 use Exception;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -25,19 +26,27 @@ class ApplicationController extends Controller
         $this->authorize('viewAny', [Application::class, $project]);
 
         $applications = $project->applications()
-        ->with('user')
-        ->orderBy('created_at', 'asc')
-        ->when(Request::input('filter'), function ($query, $filter) {
-            if ($filter == Application::VIEWED) {
-                $query->whereIn('status', [$filter, Application::ACCEPTED, Application::REJECTED]);
-            } else {
-                $query->where('status', $filter);
-            }
-        })
-        ->paginate(10)
-        ->withQueryString(); 
+            ->with('user')
+            ->orderBy('created_at', 'asc')
+            ->when(Request::input('filter'), function ($query, $filter) {
+                if ($filter == Application::VIEWED) {
+                    $query->whereIn('status', [$filter, Application::ACCEPTED, Application::REJECTED]);
+                } else {
+                    $query->where('status', $filter);
+                }
+            })
+            ->paginate(10)
+            ->withQueryString();
 
-        return Inertia::render('Applications/Index', ['project' => $project, 'applications' => $applications, 'filter' => Request::input('filter')]);
+        return Inertia::render(
+            'Applications/Index',
+            [
+                'project' => $project,
+                'applications' => $applications,
+                'filter' => Request::input('filter'),
+                'team' => $project->users, 
+            ]
+        );
     }
 
     /**
@@ -100,11 +109,11 @@ class ApplicationController extends Controller
     public function show(Project $project, Application $application)
     {
         $this->authorize('view', [Application::class, $project, $application]);
-        
+
         // update the application status to viewed when the user first views the application
         if ($application->status == Application::PENDING) {
-            $application->status = Application::VIEWED; 
-            $application->save(); 
+            $application->status = Application::VIEWED;
+            $application->save();
         }
 
         return Inertia::render('Applications/Show', ['application' => $application, 'project' => $project, 'user' => $application->user->name]);
@@ -158,15 +167,15 @@ class ApplicationController extends Controller
         ]);
 
         $this->authorize('acceptOrReject', [Application::class, $project, $application]);
-        
-        
+
+
         DB::transaction(function () use ($application, $project, $validated, $request) {
             // updating application 
             $application->update($validated);
 
             // creating record in users project table
             ProjectUser::create([
-                'user_id' => $request->user()->id,
+                'user_id' => $application->user_id,
                 'project_id' => $project->id,
             ]);
         });
