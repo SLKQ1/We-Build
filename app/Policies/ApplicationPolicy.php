@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Application;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -77,7 +78,11 @@ class ApplicationPolicy
 
     public function acceptOrReject(User $user, Project $project, Application $application)
     {   
-        return Project::where('id', $project->id)->where('user_id', $user->id)->exists();
+        $isTeamFull = ProjectUser::where('project_id', $project->id)->count() === $project->team_size; 
+        return !$isTeamFull && Project::where('id', $project->id)->where('user_id', $user->id)->exists()
+        ? Response::allow()
+        : Response::deny('This Project is full');
+;
     }
 
     /**

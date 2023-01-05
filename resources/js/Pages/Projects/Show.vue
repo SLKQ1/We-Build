@@ -47,7 +47,7 @@
           <p v-html="project.description">
           </p>
         </div>
-        <Link v-if="$page.props.auth.user.id !== project.user_id && !hasApplied"
+        <Link v-if="canApplyToProject()"
           :href="route('projects.applications.create', { project: project.id })"
           class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
         Apply to project
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, usePage } from '@inertiajs/inertia-vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
@@ -105,5 +105,16 @@ function destroy(id) {
   if (confirm("Are you sure you want to delete this project?")) {
     Inertia.delete(route("projects.destroy", { id: props.project.id }));
   }
+}
+
+function isTeamFull() {
+  return props.project.team_size === props.currentTeamSize
+}
+
+function canApplyToProject() {
+  return usePage().props.value.auth.user.id !== props.project.user_id 
+  && !props.hasApplied 
+  && props.currentTeamSize !== props.project.team_size
+  && !props.project.due
 }
 </script>

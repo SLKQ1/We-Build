@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use Exception;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -157,7 +158,18 @@ class ApplicationController extends Controller
         ]);
 
         $this->authorize('acceptOrReject', [Application::class, $project, $application]);
-        $application->update($validated);
+        
+        
+        DB::transaction(function () use ($application, $project, $validated, $request) {
+            // updating application 
+            $application->update($validated);
+
+            // creating record in users project table
+            ProjectUser::create([
+                'user_id' => $request->user()->id,
+                'project_id' => $project->id,
+            ]);
+        });
 
         if ($validated['status'] == Application::ACCEPTED) {
             return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have accepted {$application->user->name}'s application.");
