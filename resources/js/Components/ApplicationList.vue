@@ -5,7 +5,7 @@
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white"> {{ application.user.name }} </h5>
             </template>
             <template v-slot:description>
-                <p class="mb-3 font-normal text-gray-700 dark:text-gray-400"> {{ application.user.name }} applied to your project! </p>
+                <p class="mb-3 font-normal dark:text-gray-400"> {{ application.user.name }} applied to your project! </p>
             </template>
             <template v-slot:button>
                 <Link :href="route('projects.applications.show', { application: application.id, project: project.id })"

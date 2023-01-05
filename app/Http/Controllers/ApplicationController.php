@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\Project;
 use Exception;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -26,7 +27,11 @@ class ApplicationController extends Controller
         ->with('user')
         ->orderBy('created_at', 'asc')
         ->when(Request::input('filter'), function ($query, $filter) {
-            $query->where('status', $filter);
+            if ($filter == Application::VIEWED) {
+                $query->whereIn('status', [$filter, Application::ACCEPTED, Application::REJECTED]);
+            } else {
+                $query->where('status', $filter);
+            }
         })
         ->paginate(10)
         ->withQueryString(); 
@@ -94,6 +99,13 @@ class ApplicationController extends Controller
     public function show(Project $project, Application $application)
     {
         $this->authorize('view', [Application::class, $project, $application]);
+        
+        // update the application status to viewed when the user first views the application
+        if ($application->status == Application::PENDING) {
+            $application->status = Application::VIEWED; 
+            $application->save(); 
+        }
+
         return Inertia::render('Applications/Show', ['application' => $application, 'project' => $project, 'user' => $application->user->name]);
     }
 
@@ -138,7 +150,7 @@ class ApplicationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateApplicationStatus(Project $project, Application $application, Request $request)
+    public function acceptOrRejectApplication(Project $project, Application $application, HttpRequest $request)
     {
         $validated = $request->validate([
             'status' => 'bail|required',
@@ -147,7 +159,7 @@ class ApplicationController extends Controller
         $this->authorize('acceptOrReject', [Application::class, $project, $application]);
         $application->update($validated);
 
-        if ($validated['status'] == '1') {
+        if ($validated['status'] == Application::ACCEPTED) {
             return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have accepted {$application->user->name}'s application.");
         } else {
             return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have rejected {$application->user->name}'s application.");

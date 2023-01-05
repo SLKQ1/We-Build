@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete(); 
             $table->integer('team_size'); 
             $table->dateTime('due')->nullable(); 
-            $table->tinyInteger('status')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->bigInteger('points')->default(0); 
             $table->timestamps();
         });

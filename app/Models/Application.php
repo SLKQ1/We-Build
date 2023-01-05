@@ -11,9 +11,10 @@ class Application extends Model
     use HasFactory;
 
     // Application statuses 
-    const PENDING = 0;
-    const ACCEPTED = 1;
-    const REJECTED = 2;
+    const PENDING = 1;
+    const VIEWED = 2;
+    const ACCEPTED = 3;
+    const REJECTED = 4;
 
     /**
      * The table associated with the model.

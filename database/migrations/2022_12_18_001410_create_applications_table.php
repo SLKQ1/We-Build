@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('project_id')->constrained()->cascadeOnDelete();
-            $table->tinyInteger('status')->default(0); 
+            $table->tinyInteger('status')->default(1);
             $table->longText('description')->nullable(); 
             $table->string('resume_file_path'); 
             $table->timestamps();

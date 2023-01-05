@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col m-auto max-w-xs p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 md:max-w-2xl">
+        class="flex flex-col m-auto max-w-xs p-6 border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700 md:max-w-2xl">
         <a href="#">
             <slot name="title" />
         </a>

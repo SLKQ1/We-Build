@@ -85,7 +85,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
     Route::get('projects/{project}/applications/{application}', [ApplicationController::class, 'show'])->name('projects.applications.show');
     Route::get('projects/{project}/applications/{application}/resume', [ApplicationController::class, 'downloadResume'])->name('projects.applications.downloadResume');
-    Route::put('projects/{project}/applications/{application}/status', [ApplicationController::class, 'updateApplicationStatus'])->name('projects.applications.updateApplicationStatus');
+    Route::put('projects/{project}/applications/{application}/status', [ApplicationController::class, 'acceptOrRejectApplication'])->name('projects.applications.acceptOrRejectApplication');
     Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
     Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
 });
