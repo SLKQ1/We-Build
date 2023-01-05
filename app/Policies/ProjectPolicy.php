@@ -54,7 +54,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project)
     {
-        return $user->id === $project->user_id ? Response::allow() : Response::deny('You do not own this project.'); 
+        return $user->id === $project->user_id ? Response::allow() : Response::deny('You are not authorized to update this project.'); 
     }
 
     /**
@@ -66,7 +66,7 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project)
     {
-        return $user->id === $project->user_id ? Response::allow() : Response::deny('You do not own this project.'); 
+        return $user->id === $project->user_id ? Response::allow() : Response::deny('You are not authorized to delete this project.'); 
     }
 
     /**
@@ -90,6 +90,6 @@ class ProjectPolicy
      */
     public function forceDelete(User $user, Project $project)
     {
-        return $user->id === $project->user_id ? Response::allow() : Response::deny('You do not own this project.'); 
+        return $user->id === $project->user_id ? Response::allow() : Response::deny('You are not authorized to delete this project.'); 
     }
 }
