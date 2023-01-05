@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -31,8 +32,17 @@ class ProjectController extends Controller
      */
     public function index()
     {
+        $projects = Project::query()
+            ->when(Request::input('filter'), function ($query, $filter) {
+                $query->where('status', $filter);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('Projects/Index', [
-            'projects' => Project::orderBy('created_at', 'desc')->paginate(10),
+            'projects' => $projects, 
+            'filter' => Request::input('filter')
         ]);
     }
 
@@ -68,23 +78,20 @@ class ProjectController extends Controller
                         'status' => $request->status
                     ]
                 );
-    
+
                 // creating record in users project table
                 ProjectUser::create([
                     'user_id' => $request->user()->id,
                     'project_id' => $project->id,
                 ]);
 
-                return $project; 
-    
+                return $project;
             });
 
             return Redirect::route('projects.show', $project)->with('message', 'Project created successfully');
-        
         } catch (\Exception $exception) {
             return Redirect::route('projects.index')->with('error', "Unable to create project. {$exception}");
         }
-
     }
 
     /**
@@ -96,11 +103,11 @@ class ProjectController extends Controller
     public function show(Project $project)
     {
         $currentTeamSize = ProjectUser::where('project_id', $project->id)->count();
-        $hasApplied = false; 
+        $hasApplied = false;
         if (Auth::user()) {
-            $hasApplied = Application::where('project_id', $project->id)->where('user_id', Auth::user()->id)->exists(); 
+            $hasApplied = Application::where('project_id', $project->id)->where('user_id', Auth::user()->id)->exists();
         }
-        
+
         return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize, 'hasApplied' => $hasApplied]);
     }
 

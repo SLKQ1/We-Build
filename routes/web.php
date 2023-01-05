@@ -40,11 +40,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     
     Route::get('/dashboard/projects/points', function () {
-        return Inertia::render('Dashboard/UserPoints');
+        return Inertia::render('Dashboard/Projects/UserPoints');
     })->name('dashboard.points');
     
     Route::get('/dashboard/projects/team_points', function () {
-        return Inertia::render('Dashboard/TeamPoints');
+        return Inertia::render('Dashboard/Projects/TeamPoints');
     })->name('dashboard.team_points');
     
     Route::get('/dashboard/projects', function () {
@@ -58,7 +58,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->paginate(10)
             ->withQueryString(); 
     
-        return Inertia::render('Dashboard/UserProjects', ['projects' => $projects, 'filter' => Request::input('filter')]);
+        return Inertia::render('Projects/Index', ['projects' => $projects, 'filter' => Request::input('filter')]);
     })->name('dashboard.projects');
     
     Route::get('/dashboard/applications', function () {
