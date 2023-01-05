@@ -9,7 +9,7 @@
         </template>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">        
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div class="mb-3">
@@ -22,6 +22,12 @@
                                 <p>Email: {{ member.email }}</p>
                             </div>
                         </div>
+                        <div v-if="project.team_size === team.length" class="mt-5">
+                            <Link :href="route('projects.start', { project: project.id })"
+                                class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-indigo-400 rounded-lg hover:bg-indigo-600">
+                            Start Project
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -29,7 +35,7 @@
 
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">        
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div class="flex flex-col items-center my-10">
@@ -89,7 +95,7 @@
 import ApplicationList from '@/Components/ApplicationList.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 import { watch, ref } from 'vue';
 import NavLink from '@/Components/NavLink.vue';
 import { Inertia } from '@inertiajs/inertia';
