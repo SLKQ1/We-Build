@@ -34,22 +34,22 @@
                                         All
                                     </NavLink>
                                 </div>
-                                <div @click="() => filter = 0">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == 0"
+                                <div @click="() => filter = STATUSES.PENDING">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.PENDING"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         Pending
                                     </NavLink>
                                 </div>
-                                <div @click="() => filter = 1">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == 1"
+                                <div @click="() => filter = STATUSES.ACCEPTED">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.ACCEPTED"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         Accepted
                                     </NavLink>
                                 </div>
-                                <div @click="() => filter = 2">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == 2"
+                                <div @click="() => filter = STATUSES.REJECTED">
+                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.REJECTED"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
-                                        Completed
+                                        Rejected
                                     </NavLink>
                                 </div>
                             </div>
@@ -98,6 +98,7 @@ import { ref } from 'vue';
 import { watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import NavLink from '@/Components/NavLink.vue';
+import { STATUSES } from '@/Constants/Application';
 
 const props = defineProps({
     applications: Object,

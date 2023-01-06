@@ -38,17 +38,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard/Home');
     })->name('dashboard');
-    
-    Route::get('/dashboard/projects/points', function () {
-        return Inertia::render('Dashboard/Projects/UserPoints');
-    })->name('dashboard.points');
-    
-    Route::get('/dashboard/projects/team_points', function () {
-        return Inertia::render('Dashboard/Projects/TeamPoints');
-    })->name('dashboard.team_points');
-    
+
     Route::get('/dashboard/projects', function () {
         $projects = Project::query()
+            ->where('user_id', Auth::user()->id)
+            ->when(Request::input('filter'), function ($query, $filter) {
+                $query->where('status', $filter);
+            })
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Projects/Index', ['projects' => $projects, 'filter' => Request::input('filter')]);
+    })->name('dashboard.projects');
+
+    Route::get('/dashboard/projects/team', function () {
+        $projects = Project::query()
+            ->where('user_id', '!=', Auth::user()->id)
             ->whereIn('id', function ($query) {
                 $query->select('project_id')->from('project_user')->where('user_id', Auth::user()->id);
             })
@@ -56,11 +61,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $query->where('status', $filter);
             })
             ->paginate(10)
-            ->withQueryString(); 
-    
+            ->withQueryString();
+
         return Inertia::render('Projects/Index', ['projects' => $projects, 'filter' => Request::input('filter')]);
-    })->name('dashboard.projects');
-    
+    })->name('dashboard.projects.team');
+
     Route::get('/dashboard/applications', function () {
         $applications = ApplicationModel::query()
             ->with('project')
@@ -69,11 +74,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 $query->where('status', $filter);
             })
             ->paginate(10)
-            ->withQueryString(); 
+            ->withQueryString();
 
-        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications, 'filter' => Request::input('filter')]); 
+        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications, 'filter' => Request::input('filter')]);
     })->name('dashboard.applications');
-    
+
     // Project routes
     Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified');
     Route::get('projects/{project}/start', function ($project) {

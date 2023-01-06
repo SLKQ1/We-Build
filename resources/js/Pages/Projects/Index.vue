@@ -8,13 +8,20 @@
             </h2>
         </template>
 
-        <div v-if="route().current('dashboard.projects')" class="py-12">
+        <div v-if="route().current('dashboard.projects') || route().current('dashboard.projects.team')" class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-around p-6 bg-white border-b border-gray-200">
-                        <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md">
-                            Your Projects
-                        </NavLink>
+                        <div @click="() => getUserProjects()">
+                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md" :active="route().current('dashboard.projects')">
+                                Your Projects
+                            </NavLink>
+                        </div>
+                        <div @click="() => getTeamProjects()">
+                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md" :active="route().current('dashboard.projects.team')">
+                                Team Projects
+                            </NavLink>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -35,14 +42,20 @@
                                             All
                                         </NavLink>
                                     </div>
-                                    <div @click="() => filter = 1">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == 1"
+                                    <div @click="() => filter = STATUSES.OPEN">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.OPEN"
+                                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                            Open
+                                        </NavLink>
+                                    </div>
+                                    <div @click="() => filter = STATUSES.IN_PROGRESS">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.IN_PROGRESS"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Started
                                         </NavLink>
                                     </div>
-                                    <div @click="() => filter = 2">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == 2"
+                                    <div @click="() => filter = STATUSES.DONE">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.DONE"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Completed
                                         </NavLink>
@@ -56,12 +69,17 @@
                                         </Link>
                                     </div>
                                     <div>
-                                        <div v-if="filter === 1" class="flex flex-col gap-y-3 items-center">
+                                        <div v-if="filter == STATUSES.OPEN" class="flex flex-col gap-y-3 items-center">
+                                            <p class="font-semibold text-2xl">Open Projects</p>
+                                            <ProjectList :projects="projects.data"></ProjectList>
+                                            <Pagination :links="projects.links"></Pagination>
+                                        </div>
+                                        <div v-else-if="filter == STATUSES.IN_PROGRESS" class="flex flex-col gap-y-3 items-center">
                                             <p class="font-semibold text-2xl">Started Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
-                                        <div v-else-if="filter === 2" class="flex flex-col gap-y-3 items-center">
+                                        <div v-else-if="filter == STATUSES.DONE" class="flex flex-col gap-y-3 items-center">
                                             <p class="font-semibold text-2xl">Completed Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
@@ -91,6 +109,7 @@ import { watch } from 'vue';
 import ProjectList from '@/Components/ProjectList.vue';
 import Pagination from '@/Components/Pagination.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import {STATUSES} from '@/Constants/Project'
 
 const props = defineProps({
     projects: Object,
@@ -105,5 +124,13 @@ watch(filter, value => {
         { preserveState: true }
     )
 })
+
+function getTeamProjects() {
+    Inertia.get('/dashboard/projects/team')
+}
+
+function getUserProjects() {
+    Inertia.get('/dashboard/projects')
+}
 </script>
 

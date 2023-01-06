@@ -10,14 +10,20 @@
                     All
                 </NavLink>
             </div>
-            <div @click="() => filter = 1">
-                <NavLink :href="route('dashboard.projects')" :active="filter == 1"
+            <div @click="() => filter = STATUSES.OPEN">
+                <NavLink :href="route('dashboard.projects')" :active="filter === STATUSES.OPEN"
+                    class="text-center hover:bg-indigo-300 hover:rounded-md">
+                    All
+                </NavLink>
+            </div>
+            <div @click="() => filter = STATUSES.IN_PROGRESS">
+                <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.IN_PROGRESS"
                     class="text-center hover:bg-indigo-300 hover:rounded-md">
                     Started
                 </NavLink>
             </div>
-            <div @click="() => filter = 2">
-                <NavLink :href="route('dashboard.projects')" :active="filter == 2"
+            <div @click="() => filter = STATUSES.DONE">
+                <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.DONE"
                     class="text-center hover:bg-indigo-300 hover:rounded-md">
                     Completed
                 </NavLink>
@@ -59,6 +65,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { watch } from 'vue';
 import ProjectList from '@/Components/ProjectList.vue';
 import Pagination from '@/Components/Pagination.vue';
+import { STATUSES } from '@/Constants/Project';
 
 const props = defineProps({
     projects: Object,
