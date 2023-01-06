@@ -30,8 +30,9 @@
                             <h2 class="underline">Resume</h2>
                             <div>
                                 <a
+                                    
                                     :href="route('projects.applications.downloadResume', { project: project.id, application: application.id })">
-                                    <font-awesome-icon icon="fa-download" />
+                                    <font-awesome-icon class="animate-bounce w-6 h-6 pr-5" icon="fa-download" />
                                     Download Resume
                                 </a>
                             </div>
