@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->when(Request::input('filter'), function ($query, $filter) {
                 $query->where('status', $filter);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(10)
             ->withQueryString();
 
@@ -60,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->when(Request::input('filter'), function ($query, $filter) {
                 $query->where('status', $filter);
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(10)
             ->withQueryString();
 
@@ -73,6 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ->when(Request::input('filter'), function ($query, $filter) {
                 $query->where('status', $filter);
             })
+            ->orderBy('created_at', 'asc')
             ->paginate(10)
             ->withQueryString();
 

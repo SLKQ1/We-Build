@@ -67,7 +67,7 @@ class ApplicationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         $validated = $request->validate([
             'project_id' => 'bail|required',

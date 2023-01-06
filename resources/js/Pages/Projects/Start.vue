@@ -64,6 +64,7 @@
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { STATUSES } from '@/Constants/Project';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 
@@ -77,7 +78,7 @@ const form = useForm({
     description: props.project.description,
     team_size: props.project.team_size,
     due: null,
-    status: 1, 
+    status: STATUSES.IN_PROGRESS, 
 })
 
 function submit() {

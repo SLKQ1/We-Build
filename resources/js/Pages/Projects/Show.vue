@@ -9,7 +9,7 @@
     </template>
     <html lang="en" class="list-disc">
     <div class="m-4">
-      <div v-if="$page.props.auth.user.id === project.user_id && project.status === 0" class="flex justify-between">
+      <div v-if="$page.props.auth.user.id === project.user_id && project.status === STATUSES.OPEN" class="flex justify-between">
         <div class="space-x-2">
           <div @click="destroy(project.id)"
             class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-600 hover:bg-red-800 rounded-lg">
@@ -92,6 +92,7 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import moment from 'moment';
 import { Inertia } from '@inertiajs/inertia';
+import { STATUSES } from '@/Constants/Project';
 
 const props = defineProps({
   project: Object,

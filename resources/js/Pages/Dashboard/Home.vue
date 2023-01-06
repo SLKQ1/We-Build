@@ -22,6 +22,7 @@
                             <p>Team 3, rank 100</p>
                             <div class="flex justify-end">
                                 <Link
+                                :href="route('dashboard.projects.team', {filter: STATUSES.DONE})"
                                     class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
                                 See all projects
                                 </Link>
@@ -53,6 +54,7 @@
 </template>
 
 <script setup>
+import { STATUSES } from '@/Constants/Project';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
 </script>

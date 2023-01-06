@@ -56,6 +56,7 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import EditorVue from '@/Components/Editor.vue';
+import { STATUSES } from '@/Constants/Project';
 
 const editorReference = ref(null)
 
@@ -64,7 +65,7 @@ const form = useForm({
     description: null,
     team_size: 1,
     due: null,
-    status: 0, 
+    status: STATUSES.OPEN, 
 })
 
 function submit() {

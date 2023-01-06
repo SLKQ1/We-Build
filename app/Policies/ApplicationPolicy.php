@@ -57,8 +57,8 @@ class ApplicationPolicy
         // check if user has not already applied to this project
         $isFirstTimeApplying = !Application::where('user_id', $user->id)->where('project_id', $project->id)->exists();
         $isOwnerOfProject = Project::where('id', $project->id)->where('user_id', $user->id)->exists();
-        $isProjectStarted = $project->status === 1;
-
+        $isProjectStarted = $project->status === Project::IN_PROGRESS;
+        
         return !$isProjectStarted && $isFirstTimeApplying && !$isOwnerOfProject
             ? Response::allow()
             : Response::deny('You are not authorized to apply to this project.');
