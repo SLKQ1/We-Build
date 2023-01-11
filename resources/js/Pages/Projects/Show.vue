@@ -9,7 +9,8 @@
     </template>
     <html lang="en" class="list-disc">
     <div class="m-4">
-      <div v-if="$page.props.auth.user.id === project.user_id && project.status === STATUSES.OPEN" class="flex justify-between">
+      <div v-if="$page.props.auth.user.id === project.user_id && project.status === STATUSES.OPEN"
+        class="flex justify-between">
         <div class="space-x-2">
           <div @click="destroy(project.id)"
             class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-600 hover:bg-red-800 rounded-lg">
@@ -31,27 +32,62 @@
           </Link>
         </div>
       </div>
-      <div class="flex flex-col gap-y-3 items-center justify-between">
-        <div class="text-center text-gray-800 py-4">
-          <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
-          <p>
-            <strong> Team size: </strong>
-            <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
-          </p>
-          <p v-if="project.due">
-            <strong> Due: </strong>
-            <span>{{ formattedDueDate }} </span>
-          </p>
+
+      <div v-if="$page.props.auth.user.id === project.user_id && project.status === STATUSES.IN_PROGRESS"
+        class="flex justify-end">
+        <div class="space-x-2">
+          <Link :href="route('projects.complete', { id: project.id })"
+            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+          Complete Project
+          </Link>
         </div>
-        <div>
-          <p v-html="project.description">
-          </p>
+      </div>
+
+      <div>
+        <div class="flex justify-between items-center mx-20">
+          <font-awesome-icon icon="fa-solid fa-thumbs-down" size="3x" class="text-red-700 cursor-pointer" />
+          <div class="flex flex-col gap-2">
+            <div class="text-center text-red-900">
+              <font-awesome-icon icon="fa-solid fa-meteor" size="3x" />
+              <span>4</span>
+            </div>
+            <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
+          </div>
+          <font-awesome-icon icon="fa-solid fa-thumbs-up" size="3x" class="text-green-700 cursor-pointer"/>
         </div>
-        <Link v-if="canApplyToProject()"
-          :href="route('projects.applications.create', { project: project.id })"
-          class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
-        Apply to project
-        </Link>
+        <div class="flex flex-col gap-y-3 items-center justify-between">
+          <div class="text-center text-gray-800 py-4">
+            <p>
+              <strong> Team size: </strong>
+              <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
+            </p>
+            <p v-if="project.due">
+              <strong> Due: </strong>
+              <span>{{ formattedDueDate }} </span>
+            </p>
+          </div>
+          <div>
+            <p v-html="project.description">
+            </p>
+            <div class="flex flex-col gap-2">
+              <h2 class="underline">Project Links</h2>
+              <a :href="project.project_link_1">Link 1: 
+                <span class="text-blue-700">
+                  {{ project.project_link_1 }}
+                </span>
+              </a>
+              <a :href="project.project_link_2">Link 2: 
+                <span class="text-blue-700">
+                  {{ project.project_link_2 }}
+                </span>
+              </a>
+            </div>
+          </div>
+          <Link v-if="canApplyToProject()" :href="route('projects.applications.create', { project: project.id })"
+            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+          Apply to project
+          </Link>
+        </div>
       </div>
     </div>
 
@@ -97,7 +133,7 @@ import { STATUSES } from '@/Constants/Project';
 const props = defineProps({
   project: Object,
   currentTeamSize: Number,
-  hasApplied: Boolean, 
+  hasApplied: Boolean,
 })
 
 const formattedDueDate = moment(props.project.due).format('YYYY-MM-DD')
@@ -113,9 +149,9 @@ function isTeamFull() {
 }
 
 function canApplyToProject() {
-  return usePage().props.value.auth.user.id !== props.project.user_id 
-  && !props.hasApplied 
-  && props.currentTeamSize !== props.project.team_size
-  && !props.project.due
+  return usePage().props.value.auth.user.id !== props.project.user_id
+    && !props.hasApplied
+    && props.currentTeamSize !== props.project.team_size
+    && !props.project.due
 }
 </script>

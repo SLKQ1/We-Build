@@ -27,9 +27,12 @@ import { faItalic } from '@fortawesome/free-solid-svg-icons'
 import { faCode } from '@fortawesome/free-solid-svg-icons'
 import { faParagraph } from '@fortawesome/free-solid-svg-icons'
 import { faDownload } from '@fortawesome/free-solid-svg-icons'
+import { faMeteor } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 /* add icons to the library */
-library.add(faBold, faRotateLeft, faRotateRight, faLink, faUnderline, faListOl, faListUl, faListCheck, faItalic, faCode, faParagraph, faDownload)
+library.add(faBold, faThumbsUp, faThumbsDown, faMeteor, faRotateLeft, faRotateRight, faLink, faUnderline, faListOl, faListUl, faListCheck, faItalic, faCode, faParagraph, faDownload)
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 

@@ -26,11 +26,13 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'bail|required|max:50',
+            'title' => 'required|max:50',
             'description' => 'required|min:50',
             'team_size' => 'required|max:10',
             'due' => 'nullable|date|after:today', 
-            'status' => 'required'
+            'status' => 'required', 
+            'project_link_1' => 'nullable', 
+            'project_link_2' => 'nullable', 
         ];
     }
 }

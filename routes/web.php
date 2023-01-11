@@ -7,6 +7,8 @@ use Illuminate\Foundation\Application;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\ProjectUser;
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -88,6 +90,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $project = Project::where('id', $project)->firstOrFail();
         return Inertia::render('Projects/Start', ['project' => $project, 'team' => $project->users]);
     })->middleware(['auth', 'verified'])->name('projects.start');
+
+    Route::get('projects/{project}/complete', function ($project) {
+        $project = Project::where('id', $project)->firstOrFail();
+        return Inertia::render('Projects/Complete', ['project' => $project, 'team' => $project->users]);
+    })->middleware(['auth', 'verified'])->name('projects.complete');
+
+    Route::put('projects/{project}/upvote', function ($project, ClientRequest $request) {
+        $project = Project::where('id', $project)->firstOrFail(); 
+        Log::info('request', [$request]);
+
+    })->middleware(['auth', 'verified'])->name('projects.upvote'); 
 
     // Project application routes
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
