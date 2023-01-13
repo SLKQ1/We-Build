@@ -13,12 +13,14 @@
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-around p-6 bg-white border-b border-gray-200">
                         <div @click="() => getUserProjects()">
-                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md" :active="route().current('dashboard.projects')">
+                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md"
+                                :active="route().current('dashboard.projects')">
                                 Your Projects
                             </NavLink>
                         </div>
                         <div @click="() => getTeamProjects()">
-                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md" :active="route().current('dashboard.projects.team')">
+                            <NavLink class="text-center hover:bg-indigo-300 hover:rounded-md"
+                                :active="route().current('dashboard.projects.team')">
                                 Team Projects
                             </NavLink>
                         </div>
@@ -49,7 +51,8 @@
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.IN_PROGRESS">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.IN_PROGRESS"
+                                        <NavLink :href="route('dashboard.projects')"
+                                            :active="filter == STATUSES.IN_PROGRESS"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Started
                                         </NavLink>
@@ -74,12 +77,14 @@
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
-                                        <div v-else-if="filter == STATUSES.IN_PROGRESS" class="flex flex-col gap-y-3 items-center">
+                                        <div v-else-if="filter == STATUSES.IN_PROGRESS"
+                                            class="flex flex-col gap-y-3 items-center">
                                             <p class="font-semibold text-2xl">Started Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
-                                        <div v-else-if="filter == STATUSES.DONE" class="flex flex-col gap-y-3 items-center">
+                                        <div v-else-if="filter == STATUSES.DONE"
+                                            class="flex flex-col gap-y-3 items-center">
                                             <p class="font-semibold text-2xl">Completed Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
@@ -98,6 +103,75 @@
             </div>
         </div>
     </AuthenticatedLayout>
+    <GuestLayout>
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        <div class="flex flex-col gap-y-3">
+                            <div class="flex flex-col items-center gap-y-3">
+                                <h2 class="font-semibold text-4xl text-gray-800 leading-tight">
+                                </h2>
+                                <div class="flex flex-row justify-between gap-5">
+                                    <div @click="() => filter = null">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter === null"
+                                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                            All
+                                        </NavLink>
+                                    </div>
+                                    <div @click="() => filter = STATUSES.OPEN">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.OPEN"
+                                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                            Open
+                                        </NavLink>
+                                    </div>
+                                    <div @click="() => filter = STATUSES.IN_PROGRESS">
+                                        <NavLink :href="route('dashboard.projects')"
+                                            :active="filter == STATUSES.IN_PROGRESS"
+                                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                            Started
+                                        </NavLink>
+                                    </div>
+                                    <div @click="() => filter = STATUSES.DONE">
+                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.DONE"
+                                            class="text-center hover:bg-indigo-300 hover:rounded-md">
+                                            Completed
+                                        </NavLink>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>
+                                        <div v-if="filter == STATUSES.OPEN" class="flex flex-col gap-y-3 items-center">
+                                            <p class="font-semibold text-2xl">Open Projects</p>
+                                            <ProjectList :projects="projects.data"></ProjectList>
+                                            <Pagination :links="projects.links"></Pagination>
+                                        </div>
+                                        <div v-else-if="filter == STATUSES.IN_PROGRESS"
+                                            class="flex flex-col gap-y-3 items-center">
+                                            <p class="font-semibold text-2xl">Started Projects</p>
+                                            <ProjectList :projects="projects.data"></ProjectList>
+                                            <Pagination :links="projects.links"></Pagination>
+                                        </div>
+                                        <div v-else-if="filter == STATUSES.DONE"
+                                            class="flex flex-col gap-y-3 items-center">
+                                            <p class="font-semibold text-2xl">Completed Projects</p>
+                                            <ProjectList :projects="projects.data"></ProjectList>
+                                            <Pagination :links="projects.links"></Pagination>
+                                        </div>
+                                        <div v-else class="flex flex-col gap-y-3 items-center">
+                                            <p class="font-semibold text-2xl">All Projects</p>
+                                            <ProjectList :projects="projects.data"></ProjectList>
+                                            <Pagination :links="projects.links"></Pagination>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </GuestLayout>
 </template>
 
 <script setup>
@@ -109,7 +183,8 @@ import { watch } from 'vue';
 import ProjectList from '@/Components/ProjectList.vue';
 import Pagination from '@/Components/Pagination.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import {STATUSES} from '@/Constants/Project'
+import { STATUSES } from '@/Constants/Project'
+import GuestLayout from '@/Layouts/GuestLayout.vue';
 
 const props = defineProps({
     projects: Object,
