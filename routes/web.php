@@ -7,9 +7,11 @@ use Illuminate\Foundation\Application;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\ProjectUser;
+use App\Models\ProjectVotes;
 use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -96,11 +98,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Projects/Complete', ['project' => $project, 'team' => $project->users]);
     })->middleware(['auth', 'verified'])->name('projects.complete');
 
-    Route::put('projects/{project}/upvote', function ($project, ClientRequest $request) {
-        $project = Project::where('id', $project)->firstOrFail(); 
-        Log::info('request', [$request]);
+    Route::put('projects/{project}/upvote', function ($project) {
+        $validated = Request::validate([
+            'vote_type' => 'bail|required',
+        ]);
+        $project = Project::where('id', $project)->firstOrFail();
+        Log::info('request', [Request::all()]);
+        $project = DB::transaction(function () use ($project, $validated) {
+            // creating vote
+            $projectVote = ProjectVotes::create(
+                [
+                    'user_id' => Request::user()->id,
+                    'project_id' => $project->id, 
+                    'vote_type' => $validated['vote_type'],
+                ]
+            );
 
-    })->middleware(['auth', 'verified'])->name('projects.upvote'); 
+            // updating project points
+            $project->update([
+                'points' => $project->points + 1
+            ]); 
+
+            return $project;
+        });
+    })->middleware(['auth', 'verified'])->name('projects.upvote');
 
     // Project application routes
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
@@ -109,6 +130,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('projects/{project}/applications/{application}/status', [ApplicationController::class, 'acceptOrRejectApplication'])->name('projects.applications.acceptOrRejectApplication');
     Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
     Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
+
+
+    // Votes 
 });
 
 // Project routes

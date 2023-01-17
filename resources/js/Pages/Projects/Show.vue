@@ -43,9 +43,37 @@
         </div>
       </div>
 
-      <div>
+
+      <!-- Show Open Project -->
+      <div v-if="project.status === STATUSES.OPEN">
+        <!-- Project description -->
+        <div class="flex flex-col gap-y-3 items-center justify-between">
+          <div class="text-center text-gray-800 py-4">
+            <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
+            <p>
+              <strong> Team size: </strong>
+              <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
+            </p>
+            <p>
+              <strong> Status: </strong>
+              <span>Open</span>
+            </p>
+          </div>
+          <p v-html="project.description" class="w-4/5">
+          </p>
+
+          <h2 class="mt-10 font-semibold">
+            {{ generateNotAbleToApplyReasonString() }}
+          </h2>
+        </div>
+      </div>
+
+      <!-- Show Completed Project -->
+      <div v-if="project.status === STATUSES.DONE">
+        <!-- Title and vote icons -->
         <div class="flex justify-between items-center mx-20">
-          <font-awesome-icon icon="fa-solid fa-thumbs-down" size="3x" class="text-red-700 cursor-pointer" />
+          <font-awesome-icon icon="fa-solid fa-thumbs-down" size="3x"
+            class="text-red-700 cursor-pointer hover:text-red-900" />
           <div class="flex flex-col gap-2">
             <div class="text-center text-red-900">
               <font-awesome-icon icon="fa-solid fa-meteor" size="3x" />
@@ -53,41 +81,51 @@
             </div>
             <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
           </div>
-          <font-awesome-icon icon="fa-solid fa-thumbs-up" size="3x" class="text-green-700 cursor-pointer"/>
+          <font-awesome-icon @click="submitVote(1)" icon="fa-solid fa-thumbs-up" size="3x"
+            class="text-green-700 cursor-pointer hover:text-green-900" />
         </div>
+
+        <!-- Project description -->
         <div class="flex flex-col gap-y-3 items-center justify-between">
           <div class="text-center text-gray-800 py-4">
             <p>
               <strong> Team size: </strong>
               <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
             </p>
-            <p v-if="project.due">
+            <p>
+              <strong> Status: </strong>
+              <span>Done</span>
+            </p>
+            <p>
               <strong> Due: </strong>
               <span>{{ formattedDueDate }} </span>
             </p>
           </div>
-          <div>
-            <p v-html="project.description">
-            </p>
-            <div class="flex flex-col gap-2">
-              <h2 class="underline">Project Links</h2>
-              <a :href="project.project_link_1">Link 1: 
-                <span class="text-blue-700">
-                  {{ project.project_link_1 }}
-                </span>
-              </a>
-              <a :href="project.project_link_2">Link 2: 
-                <span class="text-blue-700">
-                  {{ project.project_link_2 }}
-                </span>
-              </a>
-            </div>
+          <p v-html="project.description" class="w-4/5">
+          </p>
+          <!-- Project links -->
+          <div class="flex flex-col gap-2">
+            <h2 class="underline">Project Links</h2>
+            <a :href="project.project_link_1">Link 1:
+              <span class="text-blue-700">
+                {{ project.project_link_1 }}
+              </span>
+            </a>
+            <a :href="project.project_link_2">Link 2:
+              <span class="text-blue-700">
+                {{ project.project_link_2 }}
+              </span>
+            </a>
           </div>
-          <Link v-if="canApplyToProject()" :href="route('projects.applications.create', { project: project.id })"
-            class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
-          Apply to project
-          </Link>
         </div>
+      </div>
+
+      <!-- Apply buttons -->
+      <div class="flex flex-col items-center mt-10">
+        <Link v-if="canApplyToProject()" :href="route('projects.applications.create', { project: project.id })"
+          class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+        Apply to project
+        </Link>
       </div>
     </div>
 
@@ -107,12 +145,10 @@
           <span>{{ formattedDueDate }} </span>
         </p>
       </div>
-      <div>
-        <p v-html="project.description">
-        </p>
-      </div>
+      <p v-html="project.description" class="w-4/5">
+      </p>
       <Link :href="route('projects.applications.create', { project: project.id })"
-        class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
+        class="mt-10 inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
       Apply to project
       </Link>
     </div>
@@ -153,5 +189,22 @@ function canApplyToProject() {
     && !props.hasApplied
     && props.currentTeamSize !== props.project.team_size
     && !props.project.due
+}
+
+function generateNotAbleToApplyReasonString() {
+  if (usePage().props.value.auth.user.id === props.project.user_id) {
+    return "You're already part of this project."
+  } else if (props.hasApplied) {
+    return "You've already applied to this project."
+  } else if (props.currentTeamSize === props.project.team_size) {
+    return "This project seems to be full."
+  } else if (props.project.due) {
+    return "This project is already in progress."
+  }
+}
+
+function submitVote(vote_type) {
+  console.log('in here')
+  Inertia.put(route('projects.upvote', { project: props.project.id, vote_type: vote_type }))
 }
 </script>
