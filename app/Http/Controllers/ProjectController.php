@@ -112,7 +112,8 @@ class ProjectController extends Controller
             'project' => $project, 
             'currentTeamSize' => $currentTeamSize, 
             'hasApplied' => $hasApplied, 
-            'multiplier' => $project->multiplier
+            'multiplier' => $project->multiplier, 
+            'points' => $project->points, 
         ]);
     }
 

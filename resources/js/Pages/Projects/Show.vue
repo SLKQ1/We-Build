@@ -91,6 +91,7 @@
         <!-- Project description -->
         <div class="flex flex-col gap-y-3 items-center justify-between">
           <div class="text-center text-gray-800 py-4">
+            <h2 class="mt-0 underline">Points: {{ points }}</h2>
             <p>
               <strong> Team size: </strong>
               <span>{{ currentTeamSize }}/{{ project.team_size }}</span>
@@ -176,6 +177,7 @@ const props = defineProps({
   currentTeamSize: Number,
   hasApplied: Boolean,
   multiplier: Number,
+  points: Number, 
 })
 
 const formattedDueDate = moment(props.project.due).format('YYYY-MM-DD')

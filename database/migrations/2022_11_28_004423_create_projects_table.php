@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('team_size'); 
             $table->dateTime('due')->nullable(); 
             $table->tinyInteger('status')->default(1);
-            $table->bigInteger('points')->default(0); 
+            $table->bigInteger('points')->default(1); 
             $table->timestamps();
         });
     }

@@ -52,4 +52,12 @@ class Project extends Model
     {
         return $this->hasMany(Application::class);
     }
+
+    /**
+     * Public function to get all of the votes for this project.
+    */
+    public function votes()
+    {
+        return $this->hasMany(ProjectVotes::class);
+    }
 }

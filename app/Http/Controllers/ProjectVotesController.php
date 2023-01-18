@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 class ProjectVotesController extends Controller
 {
     function submitUpVote(Request $request, Project $project) {
-        Log::info('in here submit up vote', [$request->all(), $project]); 
-        
         $validated = $request->validate([
             'vote_type' => 'bail|required',
         ]);
@@ -32,8 +30,14 @@ class ProjectVotesController extends Controller
                 );
     
                 // updating project points
+                if ($project->multiplier) {
+                    $points = $project->points + (1 * $project->multiplier); 
+                } else {
+                    $points = $project->points + 1;
+                }
+                
                 $project->update([
-                    'points' => $project->points + 1
+                    'points' => $points
                 ]); 
     
                 return $project;
