@@ -56,14 +56,14 @@
                                             <p class="font-semibold">Project submission date: {{
                                                 formatDate(currentDate)
                                             }} </p>
-                                            <p v-if="diffDays > 0" class="font-semibold text-green-700"> Days early: {{ diffDays }}
+                                            <p v-if="status == SUBMISSION_STATUSES.ON_TIME" class="font-semibold text-green-700"> Days early: {{ diffDays }}
                                             </p>
-                                            <p v-else="diffDays < 0" class="font-semibold text-red-700"> Days late: {{ diffDays }}
+                                            <p v-else="status == SUBMISSION_STATUSES.LATE" class="font-semibold text-red-700"> Days late: {{ diffDays }}
                                             </p>
                                         </div>
                                         <div class="flex flex-row gap-2 items-center font-bold text-red-900 text-2xl">
                                             <font-awesome-icon icon="fa-solid fa-meteor" size="3x" />
-                                            <p> {{ calculateMultiplier() }} </p>
+                                            <p> {{ multiplier }} </p>
                                         </div>
                                     </div>
                                 </div>
@@ -91,14 +91,17 @@ import { formatDate } from '@/Composables/formatDateYMD';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
+import { SUBMISSION_STATUSES } from '@/Constants/Project';
 
 const props = defineProps({
     project: Object,
     team: Object,
+    diffDays: Number, 
+    multiplier: Number, 
+    status: String
 })
 
 const currentDate = new Date();
-const diffDays = getDiffDates()
 
 const form = useForm({
     title: props.project.title,
@@ -112,15 +115,5 @@ const form = useForm({
 
 function submit() {
     form.put(route('projects.update', props.project.id))
-}
-
-function getDiffDates() {
-    const diffTime = Math.abs(new Date(currentDate) - new Date(props.project.due))
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays
-}
-
-function calculateMultiplier() {
-    return Math.floor(getDiffDates() * 0.2)
 }
 </script>

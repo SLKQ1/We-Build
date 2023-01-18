@@ -108,7 +108,12 @@ class ProjectController extends Controller
             $hasApplied = Application::where('project_id', $project->id)->where('user_id', Auth::user()->id)->exists();
         }
 
-        return Inertia::render('Projects/Show', ['project' => $project, 'currentTeamSize' => $currentTeamSize, 'hasApplied' => $hasApplied]);
+        return Inertia::render('Projects/Show', [
+            'project' => $project, 
+            'currentTeamSize' => $currentTeamSize, 
+            'hasApplied' => $hasApplied, 
+            'multiplier' => $project->multiplier
+        ]);
     }
 
     /**

@@ -56,7 +56,8 @@
             </p>
             <p>
               <strong> Status: </strong>
-              <span>Open</span>
+              <span v-if="project.status === STATUSES.IN_PROGRESS">In Progress</span>
+              <span v-if="project.status === STATUSES.OPEN">Open</span>
             </p>
           </div>
           <p v-html="project.description" class="w-4/5">
@@ -79,7 +80,7 @@
           <div class="flex flex-col gap-2">
             <div class="text-center text-red-900">
               <font-awesome-icon icon="fa-solid fa-meteor" size="3x" />
-              <span>4</span>
+              <span> {{ multiplier }} </span>
             </div>
             <h1 class="font-semibold underline text-5xl"> {{ project.title }} </h1>
           </div>
@@ -96,7 +97,7 @@
             </p>
             <p>
               <strong> Status: </strong>
-              <span>Done</span>
+              <span v-if="project.status === STATUSES.DONE">Done</span>
             </p>
             <p>
               <strong> Due: </strong>
@@ -174,12 +175,12 @@ const props = defineProps({
   project: Object,
   currentTeamSize: Number,
   hasApplied: Boolean,
+  multiplier: Number,
 })
 
 const formattedDueDate = moment(props.project.due).format('YYYY-MM-DD')
 
 let response = reactive({status: null, message: ''}) 
-// let response = reactive({message: ''})
 
 
 function destroy(id) {

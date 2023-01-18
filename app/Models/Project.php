@@ -16,6 +16,12 @@ class Project extends Model
     const IN_PROGRESS = 2;
     const DONE = 3;
 
+    // Project multiplier value
+    const MULTIPLIER_VAL = 0.2;
+    // Project submission status
+    const ON_TIME = '1';
+    const LATE = '2';
+
     /**
      * The table associated with the model.
      *

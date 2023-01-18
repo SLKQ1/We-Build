@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\ProjectUser;
 use App\Models\ProjectVotes;
+use Carbon\Carbon;
 use Illuminate\Http\Client\Request as ClientRequest;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
@@ -96,7 +97,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('projects/{project}/complete', function ($project) {
         $project = Project::where('id', $project)->firstOrFail();
-        return Inertia::render('Projects/Complete', ['project' => $project, 'team' => $project->users]);
+
+        // calculate multiplier
+        $dueDate = $project->due; 
+        $diffDates = now()->diffInDays(Carbon::parse($dueDate)); 
+        if ($dueDate < now()) {
+            $multiplier = 0;
+            $status = Project::LATE;
+        } else {
+            $multiplier = floor($diffDates * Project::MULTIPLIER_VAL); 
+            $status = Project::ON_TIME;
+        }
+
+        // updating project
+        $project->update([
+            'submission_date' => Carbon::now()->toDateTimeString(),
+            'multiplier' => $multiplier, 
+        ]);
+        
+        return Inertia::render('Projects/Complete', [
+            'project' => $project, 
+            'team' => $project->users, 
+            'diffDays' => $diffDates, 
+            'multiplier' => $multiplier, 
+            'status' => $status
+        ]);
     })->middleware(['auth', 'verified'])->name('projects.complete');
 
     
