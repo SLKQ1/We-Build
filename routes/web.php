@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectVotesController;
 use App\Models\Application as ApplicationModel;
 use Illuminate\Foundation\Application;
 use App\Models\Project;
@@ -98,30 +99,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Projects/Complete', ['project' => $project, 'team' => $project->users]);
     })->middleware(['auth', 'verified'])->name('projects.complete');
 
-    Route::put('projects/{project}/upvote', function ($project) {
-        $validated = Request::validate([
-            'vote_type' => 'bail|required',
-        ]);
-        $project = Project::where('id', $project)->firstOrFail();
-        Log::info('request', [Request::all()]);
-        $project = DB::transaction(function () use ($project, $validated) {
-            // creating vote
-            $projectVote = ProjectVotes::create(
-                [
-                    'user_id' => Request::user()->id,
-                    'project_id' => $project->id, 
-                    'vote_type' => $validated['vote_type'],
-                ]
-            );
-
-            // updating project points
-            $project->update([
-                'points' => $project->points + 1
-            ]); 
-
-            return $project;
-        });
-    })->middleware(['auth', 'verified'])->name('projects.upvote');
+    
+    Route::post('projects/{project}/upvote', [ProjectVotesController::class, 'submitUpVote'])->name('projects.upvote'); 
 
     // Project application routes
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');

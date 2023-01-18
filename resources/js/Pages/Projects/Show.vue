@@ -45,7 +45,7 @@
 
 
       <!-- Show Open Project -->
-      <div v-if="project.status === STATUSES.OPEN">
+      <div v-if="project.status === STATUSES.OPEN || project.status === STATUSES.IN_PROGRESS">
         <!-- Project description -->
         <div class="flex flex-col gap-y-3 items-center justify-between">
           <div class="text-center text-gray-800 py-4">
@@ -70,6 +70,8 @@
 
       <!-- Show Completed Project -->
       <div v-if="project.status === STATUSES.DONE">
+        <div v-if="response.status && response.status != 200" class="text-center max-w-6xl mx-auto mt-5 mb-5 py-3 px-3 rounded-md text-lg bg-red-300">{{ response.message }}</div>
+        <div v-else-if="response.status && response.status == 200" class="text-center max-w-6xl mx-auto mt-5 mb-5 py-3 px-3 rounded-md text-lg bg-green-300">{{ response.message }}</div>
         <!-- Title and vote icons -->
         <div class="flex justify-between items-center mx-20">
           <font-awesome-icon icon="fa-solid fa-thumbs-down" size="3x"
@@ -165,6 +167,8 @@ import { Link } from '@inertiajs/inertia-vue3';
 import moment from 'moment';
 import { Inertia } from '@inertiajs/inertia';
 import { STATUSES } from '@/Constants/Project';
+import axios from 'axios';
+import { reactive } from 'vue';
 
 const props = defineProps({
   project: Object,
@@ -173,6 +177,10 @@ const props = defineProps({
 })
 
 const formattedDueDate = moment(props.project.due).format('YYYY-MM-DD')
+
+let response = reactive({status: null, message: ''}) 
+// let response = reactive({message: ''})
+
 
 function destroy(id) {
   if (confirm("Are you sure you want to delete this project?")) {
@@ -204,7 +212,13 @@ function generateNotAbleToApplyReasonString() {
 }
 
 function submitVote(vote_type) {
-  console.log('in here')
-  Inertia.put(route('projects.upvote', { project: props.project.id, vote_type: vote_type }))
+  axios.post(route('projects.upvote', { project: props.project.id, vote_type: vote_type }))
+  .then((res) => {
+    response.status = res.status
+    response.message = res.data
+  }).catch((err) => {
+    response.status = err.response.status 
+    response.message = err.response.data.message
+  })
 }
 </script>
