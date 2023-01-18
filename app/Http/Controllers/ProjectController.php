@@ -75,7 +75,8 @@ class ProjectController extends Controller
                         'description' => $request->description,
                         'team_size' => $request->team_size,
                         'due' => $request->due,
-                        'status' => $request->status
+                        // when team size is 1 we already have a due date so the project is started
+                        'status' => $request->team_size === 1 ? Project::IN_PROGRESS : $request->status
                     ]
                 );
 
