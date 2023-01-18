@@ -54,8 +54,13 @@ class ProjectVotesPolicy
 
         $alreadyVoted = ProjectVotes::where('project_id', $project->id)->where('user_id', $user->id)->exists(); 
 
-        // return !$isProjectTeamMember && !$alreadyVoted ? Response::allow() : Response::deny('You are not authorized to vote on this project.'); ; 
-        return !$isProjectTeamMember ? Response::allow() : Response::deny('You are not authorized to vote on this project.'); ; 
+        if (!$isProjectTeamMember) {
+            return Response::deny("You can't vote on this project because you're a team member");
+        } else if (!$alreadyVoted) {
+            return Response::deny("You can't vote on this project because you have already voted");
+        }
+
+        return Response::allow(); 
     }
 
     /**
