@@ -41,8 +41,11 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard routes
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard/Home');
+    Route::get('/dashboard', function () { 
+        $userPoints = Auth::user()->projects->sum('points'); 
+        $userProjects = Auth::user()->projects;
+    
+        return Inertia::render('Dashboard/Home', ['userPoints' => $userPoints, 'userProjects' => $userProjects]);
     })->name('dashboard');
 
     Route::get('/dashboard/projects', function () {

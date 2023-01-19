@@ -12,14 +12,15 @@
                     <div class="flex justify-around p-6 space-x-3 bg-white border-b border-gray-200 text-white">
                         <div class="basis-3/4 p-5 dark:bg-gray-800 dark:border-gray-700 shadow-md rounded-lg">
                             <h2 class="underline">Your Points</h2>
+                            <h3>Points {{ userPoints }}</h3>
                             <h3>Rank 10000</h3>
                         </div>
                         <div class="basis-3/4 p-5 dark:bg-gray-800 dark:border-gray-700 shadow-md rounded-lg">
-                            <h2 class="underline">Team Points</h2>
-                            <h3 class="mb-1">Your top teams: </h3>
-                            <p>Team 1, rank 300</p>
-                            <p>Team 2, rank 200</p>
-                            <p>Team 3, rank 100</p>
+                            <h2 class="underline">Project Points</h2>
+                            <h3 class="mb-1">Your top projects: </h3>
+                            <div v-for="project in userProjects">
+                                <p>{{ project.title }}, Points: {{ project.points }}</p>
+                            </div>
                             <div class="flex justify-end">
                                 <Link
                                 :href="route('dashboard.projects.team', {filter: STATUSES.DONE})"
@@ -57,4 +58,11 @@
 import { STATUSES } from '@/Constants/Project';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
+
+const props = defineProps({
+    userPoints: Number, 
+    userProjects: Object, 
+})
+
+console.log(props.userProjects)
 </script>
