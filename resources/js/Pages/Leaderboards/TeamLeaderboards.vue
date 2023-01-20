@@ -30,7 +30,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(row, i) in leaderboards" :key="i" class="border-b dark:border-gray-700 hover:bg-indigo-200">
+                <tr v-for="(row, i) in leaderboards" :key="i" @click="goToProject(row.id)" class="border-b dark:border-gray-700 hover:bg-indigo-200">
                     <th scope="row" class="py-3 px-6">{{ i + 1 }}</th>
                     <th scope="row" class="py-3 px-6"> {{ row.title }}</th>
                     <th scope="row" class="py-3 px-6"> {{ row.team_size }}</th>
@@ -44,9 +44,13 @@
 <script setup>
 import Leaderboards from "./Leaderboards.vue";
 import NavLink from "@/Components/NavLink.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
     leaderboards: Object,
 })
 
+function goToProject(id) {
+    Inertia.get(`/projects/${id}`)
+}
 </script>

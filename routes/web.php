@@ -155,7 +155,7 @@ Route::get('/leaderboards/users', function () {
 })->name('userLeaderboards');
 
 Route::get('/leaderboards/team', function () {
-    $teamLeaderboards = Project::orderBy('points', 'desc')->get(['title', 'points', 'team_size']);
+    $teamLeaderboards = Project::where('status', Project::DONE)->orderBy('points', 'desc')->get(['id', 'title', 'points', 'team_size']);
 
     return Inertia::render('Leaderboards/TeamLeaderboards', ['leaderboards' => $teamLeaderboards]);
 })->name('teamLeaderboards'); 
