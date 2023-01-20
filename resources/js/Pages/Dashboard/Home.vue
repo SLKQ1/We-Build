@@ -1,4 +1,5 @@
 <template>
+    <Head title="Dashboard"/>
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -58,6 +59,7 @@
 import { STATUSES } from '@/Constants/Project';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Link } from '@inertiajs/inertia-vue3';
+import { Head } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     userPoints: Number, 
