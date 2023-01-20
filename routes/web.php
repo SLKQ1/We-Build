@@ -144,14 +144,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
 
 Route::get('/leaderboards/users', function () {
-    $leaderboards = DB::table('projects')
+    $userLeaderboards = DB::table('projects')
         ->select('users.name', DB::raw("sum(projects.points) as total_points"))
         ->join('project_user','projects.id','=','project_user.project_id')
         ->join('users','users.id','=','project_user.user_id')
         ->groupBy('users.id')
         ->get();
 
-    return Inertia::render('Leaderboards', ['leaderboards' => $leaderboards]);
+    return Inertia::render('Leaderboards/UserLeaderboards', ['leaderboards' => $userLeaderboards]);
 })->name('userLeaderboards');
+
+Route::get('/leaderboards/team', function () {
+    $teamLeaderboards = Project::orderBy('points', 'desc')->get(['title', 'points', 'team_size']);
+
+    return Inertia::render('Leaderboards/TeamLeaderboards', ['leaderboards' => $teamLeaderboards]);
+})->name('teamLeaderboards'); 
 
 require __DIR__ . '/auth.php';
