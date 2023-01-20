@@ -138,15 +138,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
     Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
 
-
-    // Votes 
 });
 
 // Project routes
 Route::resource('projects', ProjectController::class)->only(['show', 'index']);
 
-Route::get('/leaderboards', function () {
-    return Inertia::render('Leaderboards');
-})->name('leaderboards');
+Route::get('/leaderboards/users', function () {
+    $leaderboards = DB::table('projects')
+        ->select('users.name', DB::raw("sum(projects.points) as total_points"))
+        ->join('project_user','projects.id','=','project_user.project_id')
+        ->join('users','users.id','=','project_user.user_id')
+        ->groupBy('users.id')
+        ->get();
+
+    return Inertia::render('Leaderboards', ['leaderboards' => $leaderboards]);
+})->name('userLeaderboards');
 
 require __DIR__ . '/auth.php';

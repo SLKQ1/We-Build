@@ -63,6 +63,4 @@ const props = defineProps({
     userPoints: Number, 
     userProjects: Object, 
 })
-
-console.log(props.userProjects)
 </script>
