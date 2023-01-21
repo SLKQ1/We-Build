@@ -23,6 +23,9 @@
                                     <TextInput id="team_size" type="number" class="mt-1 block w-full"
                                         v-model="form.team_size" min="1" max="10" required autofocus />
                                     <InputError class="mt-2" :message="form.errors.team_size" />
+                                    <p v-if="form.team_size == 1" class="text-yellow-700"> 
+                                        * Team size of 1 means you are the only person in this project. The project will be started as soon as you publish it.
+                                    </p>
                                 </div>
                                 <div>
                                     <h3>Description Guidelines:</h3>
