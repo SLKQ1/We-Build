@@ -39,7 +39,7 @@ Currently working on MVP.
 Percent complete: 80%
 
 ## Upcoming features
-
+- Team Chat
 
 ## Installation Steps: 
 1. clone the repo 
