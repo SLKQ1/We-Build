@@ -10,9 +10,9 @@ Projects can be in three phases.
 3. Completed
 
 #### Open Phase: 
-- User creates a project ide
+- User creates a project
 - Project description outlines what the project is and who they are looking for to join their team
-- Other users can apply to the project
+- Other users can apply to the project by uploading their resume and cover letter
 - Project owner can view all applications and select who they're looking for
 - Project owner can contact applicants through the site to “interview them”
 - The project owner accepts the applicant and this applicant can now view details of the project
