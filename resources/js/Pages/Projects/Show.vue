@@ -208,7 +208,7 @@ function generateNotAbleToApplyReasonString() {
   } else if (props.hasApplied) {
     return "You've already applied to this project."
   } else if (props.currentTeamSize === props.project.team_size) {
-    return "This project seems to be full."
+    return "This project is full."
   } else if (props.project.due) {
     return "This project is already in progress."
   }
