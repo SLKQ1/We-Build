@@ -25,6 +25,12 @@
                                     <InputError class="mt-2" :message="form.errors.team_size" />
                                 </div>
                                 <div>
+                                    <h3>Description Guidelines:</h3>
+                                    <ul class="pl-2">
+                                        <li>Describe your project</li>
+                                        <li>What is the inspiration for your project?</li>
+                                        <li>What kind of teammates are you looking for? (If applicable)</li>
+                                    </ul>
                                     <EditorVue ref="editorReference" />
                                     <InputError class="mt-2" :message="form.errors.description" />
                                 </div>
