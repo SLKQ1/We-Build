@@ -28,12 +28,14 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <h3>Description Guidelines:</h3>
-                                    <ul class="pl-2">
-                                        <li>Describe your project</li>
-                                        <li>What is the inspiration for your project?</li>
-                                        <li>What kind of teammates are you looking for? (If applicable)</li>
-                                    </ul>
+                                    <InputLabel class="text-lg" for="resume">
+                                        <h3>Description Guidelines:</h3>
+                                        <ul class="pl-2">
+                                            <li>Describe your project</li>
+                                            <li>What is the inspiration for your project?</li>
+                                            <li>What kind of teammates are you looking for? (If applicable)</li>
+                                        </ul>
+                                    </InputLabel>
                                     <EditorVue ref="editorReference" />
                                     <InputError class="mt-2" :message="form.errors.description" />
                                 </div>
