@@ -9,7 +9,7 @@ Projects can be in three phases.
 2. In Progress
 3. Completed
 
-Open Phase: 
+#### Open Phase: 
 - User creates a project ide
 - Project description outlines what the project is and who they are looking for to join their team
 - Other users can apply to the project
@@ -18,10 +18,10 @@ Open Phase:
 - The project owner accepts the applicant and this applicant can now view details of the project
 - Whenever the project owner feels like they are ready they may "Start" their project which involves submitting a deadline and confirming the team for the project. From this point on the team has full autonomy to conduct themselves as they wish.
 
-WIP Phase: 
+#### WIP Phase: 
 - The team is actively building the project
 
-Completed Phase:
+#### Completed Phase:
 - Once the project is completed the owner submits the project
 - The owner writes out a final description of the project and provides some links to code and demo of the project
 - If a project is submitted ahead of the deadline the project gets a multiplier effect on the votes it receives 
@@ -29,7 +29,7 @@ Completed Phase:
 - After submission team members are asked to rate the individuals on their team
 - Users either upvote the project when it is completed
 
-### Leaderboards:
+#### Leaderboards:
 - Two leaderboards 1. Project. 2. User
 - Project leaderboard is for the best project based on how many votes a project gets
 - User leaderboards are for the best team member based on the total amount of votes that user's projects have received as well as how their teammates ranked them
