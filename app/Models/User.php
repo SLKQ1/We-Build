@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Project::class)->withPivot('created_at', 'updated_at', 'points');
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    } 
 }

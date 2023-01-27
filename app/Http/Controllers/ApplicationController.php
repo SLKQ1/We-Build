@@ -186,6 +186,10 @@ class ApplicationController extends Controller
             return redirect()->route('projects.applications.index', ['project' => $project])->with('message', "You have rejected {$application->user->name}'s application.");
         }
     }
+
+    public function contact(Project $project, Application $application) {
+        return Inertia::render('Applications/Contact', ['project' => $project, 'application' => $application, 'user' => $application->user]); 
+    }
     /**
      * Remove the specified resource from storage.
      *

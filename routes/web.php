@@ -4,17 +4,12 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectVotesController;
 use App\Models\Application as ApplicationModel;
+use App\Models\Message;
 use Illuminate\Foundation\Application;
 use App\Models\Project;
-use App\Models\User;
-use App\Models\ProjectUser;
-use App\Models\ProjectVotes;
 use Carbon\Carbon;
-use Illuminate\Http\Client\Request as ClientRequest;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -137,6 +132,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('projects/{project}/applications/{application}/status', [ApplicationController::class, 'acceptOrRejectApplication'])->name('projects.applications.acceptOrRejectApplication');
     Route::get('projects/{project}/application/create', [ApplicationController::class, 'create'])->name('projects.applications.create');
     Route::post('projects/{project}/application/store', [ApplicationController::class, 'store'])->name('projects.applications.store');
+    Route::get('projects/{project}/application/{application}/contact', [ApplicationController::class, 'contact'])->name('projects.applications.contact');
+
+    // Chat routes 
+    Route::get('/chat', [App\Http\Controllers\ChatsController::class, 'index']);
+    Route::get('/messages', [App\Http\Controllers\ChatsController::class, 'fetchMessages']);
+    Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
 
 });
 
