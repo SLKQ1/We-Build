@@ -51,8 +51,19 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class)->withPivot('created_at', 'updated_at', 'points');
     }
 
+    /**
+     * Public function to get all the chats this user is a part of
+     */
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class)->withPivot('created_at', 'updated_at');
+    }
+
+    /**
+     * Public function to get all the chat messages this user has sent
+     */
     public function messages()
     {
         return $this->hasMany(Message::class);
-    } 
+    }
 }

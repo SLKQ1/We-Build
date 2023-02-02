@@ -11,12 +11,9 @@
 </template>
 
 <script setup>
+import { usePage } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import PrimaryButton from './PrimaryButton.vue';
-
-const props = defineProps({
-    user: Object,
-})
 
 const emit = defineEmits([
     'messagesent'
@@ -25,7 +22,7 @@ const emit = defineEmits([
 let newMessage = ref('')
 
 function sendMessage() {
-    emit('messagesent', { user: props.user, message: newMessage.value })
+    emit('messagesent', { user: usePage().props.value.auth.user, message: newMessage.value })
     newMessage.value = ""
 }
 </script>

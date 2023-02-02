@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use App\Events\MessageSent;
+use App\Models\Chat;
 
 class ChatsController extends Controller
 {
@@ -16,20 +17,24 @@ class ChatsController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function show(Chat $chat)
     {
-        return Inertia::render('Chat/Index', ['user' => Auth::user(), 'messages' =>  Message::with('user')->get()]);
+        $messages = Message::where('chat_id', $chat->id)->with('user')->get();
+        $chat = collect($chat)->put('messages', $messages);
+
+        return Inertia::render('Chat/Index', ['user' => Auth::user(), 'chat' => $chat]);
     }
 
-    public function fetchMessages()
+    public function create() 
     {
-        return Message::with('user')->get();
+
     }
 
-    public function sendMessage(Request $request)
+    public function sendMessage(Chat $chat, Request $request)
     {
         $user = Auth::user();
         $message = $user->messages()->create([
+            'chat_id' => $chat->id, 
             'message' => $request->input('message')
         ]);
 

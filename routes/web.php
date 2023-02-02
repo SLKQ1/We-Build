@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectVotesController;
 use App\Models\Application as ApplicationModel;
@@ -36,10 +37,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard routes
-    Route::get('/dashboard', function () { 
-        $userPoints = Auth::user()->projects->sum('points'); 
+    Route::get('/dashboard', function () {
+        $userPoints = Auth::user()->projects->sum('points');
         $userProjects = Auth::user()->projects;
-    
+
         return Inertia::render('Dashboard/Home', ['userPoints' => $userPoints, 'userProjects' => $userProjects]);
     })->name('dashboard');
 
@@ -97,33 +98,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $project = Project::where('id', $project)->firstOrFail();
 
         // calculate multiplier
-        $dueDate = $project->due; 
-        $diffDates = now()->diffInDays(Carbon::parse($dueDate)); 
+        $dueDate = $project->due;
+        $diffDates = now()->diffInDays(Carbon::parse($dueDate));
         if ($dueDate < now()) {
             $multiplier = 0;
             $status = Project::LATE;
         } else {
-            $multiplier = floor($diffDates * Project::MULTIPLIER_VAL); 
+            $multiplier = floor($diffDates * Project::MULTIPLIER_VAL);
             $status = Project::ON_TIME;
         }
 
         // updating project
         $project->update([
             'submission_date' => Carbon::now()->toDateTimeString(),
-            'multiplier' => $multiplier, 
+            'multiplier' => $multiplier,
         ]);
-        
+
         return Inertia::render('Projects/Complete', [
-            'project' => $project, 
-            'team' => $project->users, 
-            'diffDays' => $diffDates, 
-            'multiplier' => $multiplier, 
+            'project' => $project,
+            'team' => $project->users,
+            'diffDays' => $diffDates,
+            'multiplier' => $multiplier,
             'status' => $status
         ]);
     })->middleware(['auth', 'verified'])->name('projects.complete');
 
-    
-    Route::post('projects/{project}/upvote', [ProjectVotesController::class, 'submitUpVote'])->name('projects.upvote'); 
+
+    Route::post('projects/{project}/upvote', [ProjectVotesController::class, 'submitUpVote'])->name('projects.upvote');
 
     // Project application routes
     Route::get('projects/{project}/applications', [ApplicationController::class, 'index'])->name('projects.applications.index');
@@ -135,10 +136,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('projects/{project}/application/{application}/contact', [ApplicationController::class, 'contact'])->name('projects.applications.contact');
 
     // Chat routes 
-    Route::get('/chat', [App\Http\Controllers\ChatsController::class, 'index']);
-    Route::get('/messages', [App\Http\Controllers\ChatsController::class, 'fetchMessages']);
-    Route::post('/messages', [App\Http\Controllers\ChatsController::class, 'sendMessage']);
-
+    Route::resource('chat', ChatsController::class);
+    Route::post('chat/{chat}/messages', [ChatsController::class, 'sendMessage']);
 });
 
 // Project routes
@@ -147,8 +146,8 @@ Route::resource('projects', ProjectController::class)->only(['show', 'index']);
 Route::get('/leaderboards/users', function () {
     $userLeaderboards = DB::table('projects')
         ->select('users.name', DB::raw("sum(projects.points) as total_points"))
-        ->join('project_user','projects.id','=','project_user.project_id')
-        ->join('users','users.id','=','project_user.user_id')
+        ->join('project_user', 'projects.id', '=', 'project_user.project_id')
+        ->join('users', 'users.id', '=', 'project_user.user_id')
         ->groupBy('users.id')
         ->get();
 
@@ -159,6 +158,6 @@ Route::get('/leaderboards/team', function () {
     $teamLeaderboards = Project::where('status', Project::DONE)->orderBy('points', 'desc')->get(['id', 'title', 'points', 'team_size']);
 
     return Inertia::render('Leaderboards/TeamLeaderboards', ['leaderboards' => $teamLeaderboards]);
-})->name('teamLeaderboards'); 
+})->name('teamLeaderboards');
 
 require __DIR__ . '/auth.php';

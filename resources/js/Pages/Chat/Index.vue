@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <Chat :messages="messages"></Chat>
+        <Chat :chat="chat"></Chat>
     </AuthenticatedLayout>
 </template>
 
@@ -10,6 +10,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
 
 const props = defineProps({
-    messages: Object,
+    chat: Object,
 })
+
+console.log(props.chat)
 </script>

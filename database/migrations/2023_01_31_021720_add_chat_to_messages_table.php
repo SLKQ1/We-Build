@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -14,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->unsigned()->constrained()->cascadeOnDelete(); 
-            $table->text('message');
-            $table->timestamps();
+        Schema::table('messages', function (Blueprint $table) {
+            $table->foreignId('chat_id')->constrained()->cascadeOnDelete()->after('id');
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('messages');
+        Schema::table('messages', function (Blueprint $table) {
+            $table->dropForeign(['chat_id']);
+        });
     }
 };
