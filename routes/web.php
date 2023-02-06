@@ -137,7 +137,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Chat routes 
     Route::resource('chat', ChatsController::class);
-    Route::post('chat/{chat}/messages', [ChatsController::class, 'sendMessage']);
+    Route::post('chat/{chat}/messages', [ChatsController::class, 'sendMessage'])->name('chat.sendMessage');
 });
 
 // Project routes

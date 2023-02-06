@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\ChatUser;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use Exception;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
@@ -44,7 +46,7 @@ class ApplicationController extends Controller
                 'project' => $project,
                 'applications' => $applications,
                 'filter' => Request::input('filter'),
-                'team' => $project->users, 
+                'team' => $project->users,
             ]
         );
     }
@@ -115,8 +117,15 @@ class ApplicationController extends Controller
             $application->status = Application::VIEWED;
             $application->save();
         }
+        
+        $chat = DB::table('chat_user')
+                        ->select('chat_id')
+                        ->whereIn('user_id', [$application->user->id, Auth::user()->id])
+                        ->groupBy('chat_id')->havingRaw('COUNT(*) = 2')
+                        ->first();
 
-        return Inertia::render('Applications/Show', ['application' => $application, 'project' => $project, 'user' => $application->user->name]);
+
+        return Inertia::render('Applications/Show', ['application' => $application, 'project' => $project, 'user' => $application->user->name, 'chat' => $chat]);
     }
 
     public function downloadResume(Project $project, Application $application)
@@ -187,8 +196,16 @@ class ApplicationController extends Controller
         }
     }
 
-    public function contact(Project $project, Application $application) {
-        return Inertia::render('Applications/Contact', ['project' => $project, 'application' => $application, 'user' => $application->user]); 
+    public function contact(Project $project, Application $application)
+    {
+        return Inertia::render('Applications/Contact', ['project' => $project, 'application' => $application, 'user' => $application->user]);
+    }
+
+    public function sendEmail(Project $project, Application $application)
+    {
+        Log::info('sending email');
+
+        // return Inertia::render()
     }
     /**
      * Remove the specified resource from storage.

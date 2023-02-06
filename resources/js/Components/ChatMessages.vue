@@ -54,11 +54,15 @@ const props = defineProps({
 
 const bottom = ref(null)
 onMounted(() => {
-    bottom.value[props.messages.length - 1].scrollIntoView()
+    if (props.messages.length) {
+        bottom.value[props.messages.length - 1].scrollIntoView()
+    }
 })
 
 watch(props.messages, () => {
-    bottom.value[props.messages.length - 2].scrollIntoView()
+    if (props.messages.length > 2) {
+        bottom.value[props.messages.length - 2].scrollIntoView()
+    }
 })
 
 

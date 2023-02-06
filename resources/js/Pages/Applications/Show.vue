@@ -30,7 +30,6 @@
                             <h2 class="underline">Resume</h2>
                             <div>
                                 <a
-                                    
                                     :href="route('projects.applications.downloadResume', { project: project.id, application: application.id })">
                                     <font-awesome-icon class="animate-bounce w-6 h-6 pr-5" icon="fa-download" />
                                     Download Resume
@@ -39,8 +38,20 @@
                         </div>
                         <div v-if="isProjectOwner() && (application.status === STATUSES.PENDING || application.status === STATUSES.VIEWED)"
                             class="flex flex-row mx-auto gap-4">
+                            <div v-if="chat">
+                                <Link :href="route('chat.show', {chat: chat.chat_id})"
+                                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 hover:cursor-pointer rounded-lg">
+                                    Contact
+                                </Link>
+                            </div>
+                            <div v-else>
+                                <Link :href="route('chat.create', {project: project.id, application: application.id})"
+                                    class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 hover:cursor-pointer rounded-lg">
+                                    Contact
+                                </Link>
+                            </div>
                             <div @click="acceptApplication"
-                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 hover:cursor-pointer rounded-lg">
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-400 hover:bg-green-600 hover:cursor-pointer rounded-lg">
                                 Accept
                             </div>
                             <div @click="rejectApplication"
@@ -48,10 +59,12 @@
                                 Reject
                             </div>
                         </div>
-                        <div v-else-if="isProjectOwner() && application.status == STATUSES.ACCEPTED" class="text-center bg-green-300 rounded font-bold mt-5">
+                        <div v-else-if="isProjectOwner() && application.status == STATUSES.ACCEPTED"
+                            class="text-center bg-green-300 rounded font-bold mt-5">
                             <p>You have accepted this application</p>
                         </div>
-                        <div v-else-if="isProjectOwner() && application.status == STATUSES.REJECTED" class="text-center bg-red-300 rounded font-bold mt-5">
+                        <div v-else-if="isProjectOwner() && application.status == STATUSES.REJECTED"
+                            class="text-center bg-red-300 rounded font-bold mt-5">
                             <p>You have rejected this application</p>
                         </div>
                     </div>
@@ -68,13 +81,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, usePage } from '@inertiajs/inertia-vue3';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import { STATUSES } from '@/Constants/Application';
 
 const props = defineProps({
     application: Object,
     project: Object,
     user: String,
+    chat: Object,
 })
 
 function acceptApplication() {

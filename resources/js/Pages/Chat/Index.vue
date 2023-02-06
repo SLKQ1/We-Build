@@ -1,5 +1,10 @@
 <template>
     <AuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ chat.name }} Chat
+            </h2>
+        </template>
         <Chat :chat="chat"></Chat>
     </AuthenticatedLayout>
 </template>
@@ -12,6 +17,4 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 const props = defineProps({
     chat: Object,
 })
-
-console.log(props.chat)
 </script>
