@@ -72,24 +72,25 @@
                                         </Link>
                                     </div>
                                     <div>
-                                        <div v-if="filter == STATUSES.OPEN" class="flex flex-col gap-y-3 items-center">
+                                        <div v-if="filter == STATUSES.OPEN" 
+                                            class="items-center space-y-3">
                                             <p class="font-semibold text-2xl">Open Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
                                         <div v-else-if="filter == STATUSES.IN_PROGRESS"
-                                            class="flex flex-col gap-y-3 items-center">
+                                            class="items-center space-y-3">
                                             <p class="font-semibold text-2xl">Started Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
                                         <div v-else-if="filter == STATUSES.DONE"
-                                            class="flex flex-col gap-y-3 items-center">
+                                            class="items-center space-y-3">
                                             <p class="font-semibold text-2xl">Completed Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
                                         </div>
-                                        <div v-else class="flex flex-col gap-y-3 items-center">
+                                        <div v-else class="items-center space-y-3">
                                             <p class="font-semibold text-2xl">All Projects</p>
                                             <ProjectList :projects="projects.data"></ProjectList>
                                             <Pagination :links="projects.links"></Pagination>
