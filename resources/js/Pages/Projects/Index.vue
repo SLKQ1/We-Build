@@ -4,11 +4,11 @@
     <AuthenticatedLayout v-if="$page.props.auth.user">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Projects
+                {{ $page.props.auth.user.name }}'s Projects
             </h2>
         </template>
 
-        <div v-if="route().current('dashboard.projects') || route().current('dashboard.projects.team')" class="py-12">
+        <div v-if="route().current('dashboard.projects', {user: $page.props.auth.user.name}) || route().current('dashboard.projects.team')" class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="flex justify-around p-6 bg-white border-b border-gray-200">
@@ -39,26 +39,26 @@
                                 </h2>
                                 <div class="flex flex-row justify-between gap-5">
                                     <div @click="() => filter = null">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter === null"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter === null"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             All
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.OPEN">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.OPEN"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter == STATUSES.OPEN"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Open
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.IN_PROGRESS">
-                                        <NavLink :href="route('dashboard.projects')"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})"
                                             :active="filter == STATUSES.IN_PROGRESS"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Started
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.DONE">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.DONE"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter == STATUSES.DONE"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Completed
                                         </NavLink>
@@ -115,26 +115,26 @@
                                 </h2>
                                 <div class="flex flex-row justify-between gap-5">
                                     <div @click="() => filter = null">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter === null"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter === null"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             All
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.OPEN">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.OPEN"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter == STATUSES.OPEN"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Open
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.IN_PROGRESS">
-                                        <NavLink :href="route('dashboard.projects')"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})"
                                             :active="filter == STATUSES.IN_PROGRESS"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Started
                                         </NavLink>
                                     </div>
                                     <div @click="() => filter = STATUSES.DONE">
-                                        <NavLink :href="route('dashboard.projects')" :active="filter == STATUSES.DONE"
+                                        <NavLink :href="route('dashboard.projects', {user: $page.props.auth.user.name})" :active="filter == STATUSES.DONE"
                                             class="text-center hover:bg-indigo-300 hover:rounded-md">
                                             Completed
                                         </NavLink>
@@ -176,7 +176,7 @@
 </template>
 
 <script setup>
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head, Link, usePage } from '@inertiajs/inertia-vue3';
 import NavLink from '@/Components/NavLink.vue';
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
@@ -206,7 +206,7 @@ function getTeamProjects() {
 }
 
 function getUserProjects() {
-    Inertia.get('/dashboard/projects')
+    Inertia.get(route('dashboard.projects', {user: usePage().props.value.auth.user.name}))
 }
 </script>
 

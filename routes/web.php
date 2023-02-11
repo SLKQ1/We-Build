@@ -4,6 +4,8 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectVotesController;
+use App\Http\Controllers\UserDashboardController;
+use App\Http\Controllers\UserDashboardProjectsController;
 use App\Models\Application as ApplicationModel;
 use App\Models\Message;
 use Illuminate\Foundation\Application;
@@ -37,25 +39,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard routes
-    Route::get('/dashboard', function () {
-        $userPoints = Auth::user()->projects->sum('points');
-        $userProjects = Auth::user()->projects;
-
-        return Inertia::render('Dashboard/Home', ['userPoints' => $userPoints, 'userProjects' => $userProjects]);
-    })->name('dashboard');
-
-    Route::get('/dashboard/projects', function () {
-        $projects = Project::query()
-            ->where('user_id', Auth::user()->id)
-            ->when(Request::input('filter'), function ($query, $filter) {
-                $query->where('status', $filter);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return Inertia::render('Projects/Index', ['projects' => $projects, 'filter' => Request::input('filter')]);
-    })->name('dashboard.projects');
+    Route::get('{user}/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+    Route::get('{user}/dashboard/projects', [UserDashboardProjectsController::class, 'index'])->name('dashboard.projects');
 
     Route::get('/dashboard/projects/team', function () {
         $projects = Project::query()
