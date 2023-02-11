@@ -4,8 +4,10 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectVotesController;
+use App\Http\Controllers\UserDashboardApplicationsController;
 use App\Http\Controllers\UserDashboardController;
 use App\Http\Controllers\UserDashboardProjectsController;
+use App\Http\Controllers\UserDashboardTeamProjectsController;
 use App\Models\Application as ApplicationModel;
 use App\Models\Message;
 use Illuminate\Foundation\Application;
@@ -41,36 +43,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard routes
     Route::get('{user}/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
     Route::get('{user}/dashboard/projects', [UserDashboardProjectsController::class, 'index'])->name('dashboard.projects');
-
-    Route::get('/dashboard/projects/team', function () {
-        $projects = Project::query()
-            ->where('user_id', '!=', Auth::user()->id)
-            ->whereIn('id', function ($query) {
-                $query->select('project_id')->from('project_user')->where('user_id', Auth::user()->id);
-            })
-            ->when(Request::input('filter'), function ($query, $filter) {
-                $query->where('status', $filter);
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return Inertia::render('Projects/Index', ['projects' => $projects, 'filter' => Request::input('filter')]);
-    })->name('dashboard.projects.team');
-
-    Route::get('/dashboard/applications', function () {
-        $applications = ApplicationModel::query()
-            ->with('project')
-            ->where('user_id', Auth::user()->id)
-            ->when(Request::input('filter'), function ($query, $filter) {
-                $query->where('status', $filter);
-            })
-            ->orderBy('created_at', 'asc')
-            ->paginate(10)
-            ->withQueryString();
-
-        return Inertia::render('Dashboard/Applications/Index', ['applications' => $applications, 'filter' => Request::input('filter')]);
-    })->name('dashboard.applications');
+    Route::get('{user}/dashboard/projects/team', [UserDashboardTeamProjectsController::class, 'index'])->name('dashboard.projects.team');
+    Route::get('{user}/dashboard/applications', [UserDashboardApplicationsController::class, 'index'])->name('dashboard.applications');
 
     // Project routes
     Route::resource('projects', ProjectController::class)->except(['show', 'index'])->middleware('auth', 'verified');

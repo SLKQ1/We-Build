@@ -2,7 +2,7 @@
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Applications
+                {{ $page.props.auth.user.name }}'s Applications
             </h2>
         </template>
 
@@ -29,25 +29,25 @@
                             </h2>
                             <div class="flex flex-row justify-between gap-5 mb-4">
                                 <div @click="() => filter = null">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == null"
+                                    <NavLink :href="route('dashboard.applications', {user: $page.props.auth.user.name})" :active="filter == null"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         All
                                     </NavLink>
                                 </div>
                                 <div @click="() => filter = STATUSES.PENDING">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.PENDING"
+                                    <NavLink :href="route('dashboard.applications', {user: $page.props.auth.user.name})" :active="filter == STATUSES.PENDING"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         Pending
                                     </NavLink>
                                 </div>
                                 <div @click="() => filter = STATUSES.ACCEPTED">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.ACCEPTED"
+                                    <NavLink :href="route('dashboard.applications', {user: $page.props.auth.user.name})" :active="filter == STATUSES.ACCEPTED"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         Accepted
                                     </NavLink>
                                 </div>
                                 <div @click="() => filter = STATUSES.REJECTED">
-                                    <NavLink :href="route('dashboard.applications')" :active="filter == STATUSES.REJECTED"
+                                    <NavLink :href="route('dashboard.applications', {user: $page.props.auth.user.name})" :active="filter == STATUSES.REJECTED"
                                         class="text-center hover:bg-indigo-300 hover:rounded-md">
                                         Rejected
                                     </NavLink>

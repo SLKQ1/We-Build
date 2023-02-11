@@ -24,7 +24,7 @@
                             </div>
                             <div class="flex justify-end">
                                 <Link
-                                :href="route('dashboard.projects.team', {filter: STATUSES.DONE})"
+                                :href="route('dashboard.projects.team', {user: $page.props.auth.user.name, filter: STATUSES.DONE})"
                                     class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-indigo-400 hover:bg-indigo-600 rounded-lg">
                                 See all projects
                                 </Link>
@@ -44,7 +44,7 @@
                             class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
                         See Projects
                         </Link>
-                        <Link :href="route('dashboard.applications')"
+                        <Link :href="route('dashboard.applications', {user: $page.props.auth.user.name})"
                             class="basis-1/4 text-center hover:bg-indigo-300 hover:rounded-md">
                         See Applications
                         </Link>
